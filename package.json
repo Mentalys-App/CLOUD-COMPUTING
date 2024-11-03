@@ -1,0 +1,40 @@
+{
+  "name": "express-typescript-setup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Abdi Setiawan",
+    "url": "https://github.com/abdisetiakawan",
+    "email": "bedikadiryt@gmail.com"
+  },
+  "scripts": {
+    "prod": "node ./dist/index.js",
+    "build": "tsc && cp .env ./dist/.env",
+    "lint": "eslint src/**/*.ts",
+    "format": "npx prettier . --write",
+    "prepare": "husky install",
+    "dev": "npx nodemon",
+    "start": "yarn build && yarn prod"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.13.0",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint"
+    ]
+  }
+}
