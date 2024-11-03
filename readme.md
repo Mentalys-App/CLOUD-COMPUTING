@@ -72,21 +72,31 @@ Mentalys App is a comprehensive mental health application built on Google Cloud 
 ### Configuration Steps
 1. Clone the repository
 ```bash
-Coming Soon!
+git clone https://github.com/Mentalys-App/backend
 ```
 
-2. Set up GCP credentials
+2. Install Dependency
+- NPM
+```bash
+npm install
+```
+- Yarn
+```bash
+yarn install
+```
+
+3. Set up GCP credentials
 ```bash
 Coming Soon!
 ```
 
-3. Enable required GCP APIs
+4. Enable required GCP APIs
 - Cloud Run API
 - Kubernetes Engine API
 - Cloud Storage API
 - Firebase API
 
-4. Deploy to GCP
+5. Deploy to GCP
 ```bash
 Coming Soon!
 ```
