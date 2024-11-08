@@ -107,6 +107,10 @@ Create a `.env` file with the following variables:
 Coming Soon!
 ```
 
+### Entity Relationship Diagram
+![schema](https://github.com/user-attachments/assets/7ba5b652-17ec-4c8b-9a61-6272d70b3227)
+
+
 ## Security Considerations
 - All API endpoints are secured with Firebase Authentication
 - Data encryption in transit and at rest
