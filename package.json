@@ -36,5 +36,14 @@
     "*.{js,jsx,ts,tsx}": [
       "yarn lint"
     ]
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.10.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "firebase-admin": "^12.7.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.0"
   }
 }
