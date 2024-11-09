@@ -4,9 +4,7 @@
     "module": "commonjs",
     "rootDir": "./src",
     "paths": {
-      "./*": ["./src"],
-      "../*": ["./src/*"],
-      "*": ["./node_modules/*"]
+      "@/*": ["./src/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "sourceMap": true,
@@ -14,6 +12,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "resolveJsonModule": true,
     "noImplicitAny": true,
     "skipLibCheck": true
   },
