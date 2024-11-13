@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { AppError } from '@/utils/AppError'
-import { AuthRequestBody } from '@/types/authReques.type'
-import { authService } from '@/services/authService'
+import { AuthRequestBody } from '@/types/authRequest.type'
+import { authService } from '@/services/auth.service'
 import handleAuthError from '@/middleware/authHandler.middleware'
 
 export const registerUser = async (
