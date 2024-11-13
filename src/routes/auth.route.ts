@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express'
-import { googleLogin, loginUser, registerUser } from '../controllers/authController'
+import { googleLogin, loginUser, registerUser } from '../controllers/auth.controller'
 
 const authRouter: Router = Router()
 

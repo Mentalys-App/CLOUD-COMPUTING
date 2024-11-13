@@ -1,15 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { auth } from '../config/firebaseConfig'
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithCredential,
-  signInWithEmailAndPassword,
-  UserCredential
-} from 'firebase/auth'
 import { AppError } from '@/utils/AppError'
-import { AuthRequestBody } from '@/types/authRequestTypes'
-import handleAuthError from '@/middleware/authHandlerMiddleware'
+import { AuthRequestBody } from '@/types/authReques.type'
+import { authService } from '@/services/authService'
+import handleAuthError from '@/middleware/authHandler.middleware'
 
 export const registerUser = async (
   req: Request<AuthRequestBody>,
@@ -17,26 +10,14 @@ export const registerUser = async (
   next: NextFunction
 ): Promise<Response | void> => {
   const { email, password } = req.body
-
   if (!email || !password) {
     return next(AppError('Email dan password harus diisi', 400))
   }
-
   try {
-    const userCredential: UserCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    )
-    const idToken = await userCredential.user.getIdToken()
-
+    const userData = await authService.registerWithEmail(email, password)
     return res.status(201).json({
       status: 'success',
-      data: {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        idToken
-      }
+      data: userData
     })
   } catch (error) {
     return next(handleAuthError(error))
@@ -49,22 +30,14 @@ export const loginUser = async (
   next: NextFunction
 ): Promise<Response | void> => {
   const { email, password } = req.body
-
   if (!email || !password) {
     return next(AppError('Email dan password harus diisi', 400))
   }
-
   try {
-    const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password)
-    const idToken = await userCredential.user.getIdToken()
-
+    const userData = await authService.loginWithEmail(email, password)
     return res.status(200).json({
       status: 'success',
-      data: {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        idToken
-      }
+      data: userData
     })
   } catch (error) {
     return next(handleAuthError(error))
@@ -77,22 +50,14 @@ export const googleLogin = async (
   next: NextFunction
 ): Promise<Response | void> => {
   const { idToken } = req.body
-
   if (!idToken) {
     return next(AppError('Token ID Google diperlukan', 400))
   }
-
   try {
-    const credential = GoogleAuthProvider.credential(idToken)
-    const userCredential: UserCredential = await signInWithCredential(auth, credential)
-
+    const userData = await authService.loginWithGoogle(idToken)
     return res.status(200).json({
       status: 'success',
-      data: {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        displayName: userCredential.user.displayName
-      }
+      data: userData
     })
   } catch (error) {
     return next(handleAuthError(error))
