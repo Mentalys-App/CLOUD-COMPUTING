@@ -1,8 +1,9 @@
 import { Request, Router, Response, NextFunction } from 'express'
-import authRouter from './authRoute'
+import authRouter from './auth.route'
 import { notFound } from '@/middleware/error/notFound'
 import { globalErrorHandler } from '@/middleware/error/error'
-import { authenticateUser } from '@/middleware/authMiddleware'
+import { authenticateUser } from '@/middleware/auth.middleware'
+import profileRouter from './profile.route'
 
 const app: Router = Router()
 
@@ -19,6 +20,7 @@ app.get(
   }
 )
 app.use('/api/auth', authRouter)
+app.use('/api/user', profileRouter)
 app.use('*', notFound)
 app.use(globalErrorHandler)
 export default app
