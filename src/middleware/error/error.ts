@@ -1,6 +1,6 @@
 import { NextFunction, type Request, type Response } from 'express'
 import logger from '@/utils/logger'
-import { IAppError } from '@/types/errorTypes'
+import { IAppError } from '@/types/error.type'
 
 // Fungsi untuk menangani error di lingkungan pengembangan
 const sendErrorDev = (error: IAppError, req: Request, res: Response): Response => {

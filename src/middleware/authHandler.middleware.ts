@@ -1,4 +1,4 @@
-import { IAppError } from '@/types/errorTypes'
+import { IAppError } from '@/types/error.type'
 import { AppError } from '@/utils/AppError'
 import { AuthError, AuthErrorCodes } from 'firebase/auth'
 

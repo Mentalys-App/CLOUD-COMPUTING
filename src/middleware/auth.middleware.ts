@@ -1,9 +1,8 @@
-// src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express'
 import { admin } from '../config/firebaseConfig'
 
 interface AuthenticatedRequest extends Request {
-  user?: admin.auth.DecodedIdToken // Menyimpan informasi pengguna yang terautentikasi
+  user?: admin.auth.DecodedIdToken
 }
 
 export const authenticateUser = async (
