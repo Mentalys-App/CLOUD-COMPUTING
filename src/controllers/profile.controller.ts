@@ -1,10 +1,12 @@
 import prisma from '@/utils/client'
-import { profileValidationSchema } from '@/validations/profile.validation'
+import {
+  profileValidationSchema,
+  updateProfileValidationSchema
+} from '@/validations/profile.validation'
 import { Request, Response, NextFunction } from 'express'
 import { ProfileService } from '../services/profile.service'
 import { AppError } from '@/utils/AppError'
 import { formatJoiError } from '@/utils/joiValidation'
-import prismaErrorHandler from '@/middleware/prismaHandler.middleware'
 export interface AuthenticatedRequest extends Request {
   user?: {
     uid: string
@@ -33,15 +35,21 @@ export const createProfile = async (
     }
     const profileData = {
       ...req.body,
-      userId: user.id
+      birth_date: new Date(req.body.birth_date),
+      firebaseId: uid_firebase,
+      username: req.body.username.trim(),
+      full_name: req.body.full_name.trim(),
+      location: req.body.location.trim()
     }
+
     const newProfile = await ProfileService.createProfile(profileData)
     return res.status(201).json({
       status: 'success',
+      message: 'Profile created successfully',
       data: newProfile
     })
   } catch (error) {
-    return next(prismaErrorHandler(error))
+    next(error)
   }
 }
 export const updateProfileController = async (
@@ -50,40 +58,42 @@ export const updateProfileController = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const uid_firebase: string | undefined = req.user?.uid
+    const { error } = updateProfileValidationSchema.validate(req.body)
+    if (error) {
+      const validationError = formatJoiError(error)
+      return res.status(400).json(validationError)
+    }
+    const uid_firebase = req.user?.uid
     if (!uid_firebase) {
       return next(AppError('unauthorized', 404))
     }
-    const user = await prisma.user.findUnique({
+    const userProfile = await prisma.profile.findUnique({
       where: {
-        uid_firebase
+        firebaseId: uid_firebase
       }
     })
-    if (!user) {
+    if (!userProfile) {
       return next(AppError('User not found', 404))
     }
-    const userId = user.id
-    const currentProfile = await prisma.profile.findUnique({
-      where: { userId }
-    })
-    if (!currentProfile) {
-      return next(AppError('Profile not found', 404))
-    }
     const updatedData = {
-      ...currentProfile,
-      username: req.body.username ?? currentProfile.username,
-      profile_pic: req.body.profile_pic !== null ? currentProfile.profile_pic : null,
-      full_name: req.body.full_name ?? currentProfile.full_name,
-      birth_date: req.body.birth_date ?? currentProfile.birth_date,
-      location: req.body.location ?? currentProfile.location,
-      gender: req.body.gender ?? currentProfile.gender
+      ...userProfile,
+      username: req.body.username ? req.body.username.trim() : userProfile.username,
+      profile_pic: req.body.profile_pic !== null ? userProfile.profile_pic : null,
+      full_name: req.body.full_name ? req.body.full_name.trim() : userProfile.full_name,
+      birth_date: isNaN(new Date(req.body.birth_date).getTime())
+        ? userProfile.birth_date
+        : new Date(req.body.birth_date),
+      location: req.body.location ? req.body.location.trim() : userProfile.location,
+      gender: req.body.gender ?? userProfile.gender
     }
-    const updatedProfile = await ProfileService.updateProfile(userId, updatedData)
+
+    const updatedProfile = await ProfileService.updateProfile(uid_firebase, updatedData)
     return res.status(200).json({
       status: 'success',
+      message: 'Profile updated successfully',
       data: updatedProfile
     })
   } catch (error) {
-    next(prismaErrorHandler(error))
+    next(error)
   }
 }
