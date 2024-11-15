@@ -24,8 +24,7 @@ export const registerUser = async (
       data: userData
     })
   } catch (error) {
-    console.error(error)
-    return next(handleAuthError(error))
+    next(error)
   }
 }
 
