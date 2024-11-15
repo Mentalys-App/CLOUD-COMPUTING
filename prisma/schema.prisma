@@ -19,20 +19,19 @@ enum Gender {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  uid_firebase   String   @unique
+  uid_firebase   String   @id   
   email          String   @unique
   profile        Profile?
   createdAt      DateTime @default(now())
 }
 
 model Profile {
-  userId         String   @id
-  user           User     @relation(fields: [userId], references: [id])
+  firebaseId     String   @id
+  firebaseUser   User     @relation(fields: [firebaseId], references: [uid_firebase])
   username       String
   profile_pic    String?
   full_name      String
-  birth_date     DateTime
+  birth_date     DateTime @db.Date
   location       String
   gender         Gender
   createdAt      DateTime @default(now())
