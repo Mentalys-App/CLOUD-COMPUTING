@@ -3,6 +3,8 @@ import { AppError } from '@/utils/AppError'
 import { AuthRequestBody } from '@/types/authRequest.type'
 import { authService } from '@/services/auth.service'
 import handleAuthError from '@/middleware/authHandler.middleware'
+import { registrationSchema } from '@/validations/auth.validation'
+import { formatJoiError } from '@/utils/joiValidation'
 
 export const registerUser = async (
   req: Request<AuthRequestBody>,
@@ -10,8 +12,10 @@ export const registerUser = async (
   next: NextFunction
 ): Promise<Response | void> => {
   const { email, password } = req.body
-  if (!email || !password) {
-    return next(AppError('Email dan password harus diisi', 400))
+  const { error } = registrationSchema.validate(req.body)
+  if (error) {
+    const validationError = formatJoiError(error)
+    return res.status(400).json(validationError)
   }
   try {
     const userData = await authService.registerWithEmail(email, password)
@@ -20,6 +24,7 @@ export const registerUser = async (
       data: userData
     })
   } catch (error) {
+    console.error(error)
     return next(handleAuthError(error))
   }
 }
