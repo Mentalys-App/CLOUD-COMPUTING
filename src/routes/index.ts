@@ -19,7 +19,9 @@ app.get(
     })
   }
 )
+// login, daftar, dan reset password
 app.use('/api/auth', authRouter)
+// create profile dan update profile
 app.use('/api/user', profileRouter)
 app.use('*', notFound)
 app.use(globalErrorHandler)
