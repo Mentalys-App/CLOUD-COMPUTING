@@ -44,7 +44,7 @@ export const loginUser = async (
       data: userData
     })
   } catch (error) {
-    return next(handleAuthError(error))
+    next(error)
   }
 }
 

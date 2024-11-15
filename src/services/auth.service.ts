@@ -47,12 +47,19 @@ export const authService = {
   },
 
   async loginWithEmail(email: string, password: string) {
-    const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password)
-    const idToken = await userCredential.user.getIdToken()
-    return {
-      uid: userCredential.user.uid,
-      email: userCredential.user.email,
-      idToken
+    try {
+      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password)
+      const idToken = await userCredential.user.getIdToken()
+      return {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+        idToken
+      }
+    } catch (error) {
+      if (handleAuthError(error)) {
+        throw handleAuthError(error)
+      }
+      throw error
     }
   },
 
