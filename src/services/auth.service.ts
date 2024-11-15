@@ -1,5 +1,7 @@
 import { auth } from '@/config/firebaseConfig'
+import { AppError } from '@/utils/AppError'
 import prisma from '@/utils/client'
+import { PrismaClientInitializationError } from '@prisma/client/runtime/library'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -10,23 +12,29 @@ import {
 
 export const authService = {
   async registerWithEmail(email: string, password: string) {
-    const userCredential: UserCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    )
-    const uid = userCredential.user.uid
-    const idToken = await userCredential.user.getIdToken()
-    await prisma.user.create({
-      data: {
-        uid_firebase: uid,
-        email: email
+    let userCredential: UserCredential | null = null
+    try {
+      userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const uid = userCredential.user.uid
+      const idToken = await userCredential.user.getIdToken()
+      await prisma.user.create({
+        data: {
+          uid_firebase: uid,
+          email: email
+        }
+      })
+      return {
+        uid,
+        email: userCredential.user.email,
+        idToken
       }
-    })
-    return {
-      uid,
-      email: userCredential.user.email,
-      idToken
+    } catch (error) {
+      if (userCredential) {
+        await userCredential.user.delete()
+      }
+      if (error instanceof PrismaClientInitializationError) {
+        throw AppError('Terjadi kesalahan internal server', 500)
+      }
     }
   },
 
