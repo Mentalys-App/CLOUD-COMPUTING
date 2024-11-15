@@ -1,7 +1,7 @@
 import { Gender } from '@prisma/client'
 
 export interface IProfile {
-  userId: string
+  firebaseId: string
   username: string
   profile_pic?: string | undefined
   full_name: string
