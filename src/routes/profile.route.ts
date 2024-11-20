@@ -1,29 +1,21 @@
 import { Router, Request, Response, NextFunction } from 'express'
+import { createProfile } from '../controllers/profile.controller'
 import { authenticateUser } from '../middleware/auth.middleware'
-import {
-  AuthenticatedRequest,
-  createProfile,
-  updateProfileController
-} from '@/controllers/profile.controller'
 
-const profileRouter = Router()
+const profileRouter: Router = Router()
+export interface AuthenticatedRequest extends Request {
+  user: {
+    uid: string
+  }
+}
 
 profileRouter.post(
-  '/profiles',
+  '/create',
   (req: Request, res: Response, next: NextFunction) => {
     authenticateUser(req, res, next)
   },
-  (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    createProfile(req, res, next)
-  }
-)
-profileRouter.put(
-  '/profiles',
   (req: Request, res: Response, next: NextFunction) => {
-    authenticateUser(req, res, next)
-  },
-  (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    updateProfileController(req, res, next)
+    createProfile(req as AuthenticatedRequest, res, next)
   }
 )
 

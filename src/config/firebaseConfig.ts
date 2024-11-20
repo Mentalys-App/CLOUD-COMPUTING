@@ -7,6 +7,8 @@ import {
   signInWithEmailAndPassword
 } from 'firebase/auth'
 import 'dotenv/config'
+import { getFirestore } from '@firebase/firestore'
+import { getStorage } from 'firebase/storage'
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const serviceAccount = require('./serviceAccountKey.json')
@@ -22,17 +24,12 @@ const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  appId: process.env.FIREBASE_APP_ID
 }
 
-firebase.initializeApp(firebaseConfig)
-const auth = getAuth()
+const app = firebase.initializeApp(firebaseConfig)
+export const auth = getAuth(app)
+export const db = getFirestore(app)
+export const storage = getStorage(app)
 
-export {
-  admin,
-  auth,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-}
+export { admin, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword }
