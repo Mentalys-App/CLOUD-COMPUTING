@@ -3,6 +3,8 @@ import { ProfileRequestBody } from '@/types/profile.type'
 import { profileService } from '@/services/profile.service'
 import { profileValidationSchema } from '@/validations/profile.validation'
 import { formatJoiError } from '@/utils/joiValidation'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { db } from '@/config/firebaseConfig'
 
 export interface AuthenticatedRequest extends Request {
   user: {
@@ -24,7 +26,18 @@ export const createProfile = async (
 
     const uid = req.user.uid
     const profileData: ProfileRequestBody = req.body
+    const usernameQuery = query(
+      collection(db, 'profiles'),
+      where('username', '==', profileData.username)
+    )
+    const usernameSnapshot = await getDocs(usernameQuery)
 
+    if (!usernameSnapshot.empty) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Username already exists'
+      })
+    }
     const createdProfile = await profileService.createProfile(uid, profileData)
 
     return res.status(201).json({
