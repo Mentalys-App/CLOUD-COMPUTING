@@ -12,7 +12,7 @@ export const profileService = {
     const usernameSnapshot = await getDocs(usernameQuery)
 
     if (!usernameSnapshot.empty) {
-      throw AppError('Username already taken', 400)
+      return AppError('Username already taken', 400)
     }
     const profileRef = doc(db, 'profiles', uid)
     const timestamp = new Date().toISOString()
