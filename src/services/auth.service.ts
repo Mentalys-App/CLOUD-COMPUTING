@@ -1,15 +1,12 @@
-import { auth } from '@/config/firebaseConfig'
-import handleAuthError from '@/middleware/authHandler.middleware'
-import { AppError } from '@/utils/AppError'
-import prisma from '@/utils/client'
-import { PrismaClientInitializationError } from '@prisma/client/runtime/library'
+import { auth, db } from '@/config/firebaseConfig'
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithCredential,
   UserCredential
 } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
 
 export const authService = {
   async registerWithEmail(email: string, password: string) {
@@ -18,58 +15,30 @@ export const authService = {
       email,
       password
     )
-    try {
-      const uid = userCredential.user.uid
-      const idToken = await userCredential.user.getIdToken()
-      await prisma.user.create({
-        data: {
-          uid_firebase: uid,
-          email
-        }
-      })
-      return {
-        uid,
-        email: userCredential.user.email,
-        idToken
-      }
-    } catch (error) {
-      if (error instanceof PrismaClientInitializationError) {
-        if (userCredential) {
-          await userCredential.user.delete()
-        }
-        throw AppError('Periksa koneksi database anda', 500)
-      }
-      if (handleAuthError(error)) {
-        throw handleAuthError(error)
-      }
-      throw error
+    await sendEmailVerification(userCredential.user)
+
+    const uid = userCredential.user.uid
+    const userRef = doc(db, 'users', uid)
+    await setDoc(userRef, {
+      uid_firebase: uid,
+      email
+    })
+    return {
+      uid,
+      email: userCredential.user.email
     }
   },
 
   async loginWithEmail(email: string, password: string) {
-    try {
-      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password)
-      const idToken = await userCredential.user.getIdToken()
-      return {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        idToken
-      }
-    } catch (error) {
-      if (handleAuthError(error)) {
-        throw handleAuthError(error)
-      }
-      throw error
-    }
-  },
-
-  async loginWithGoogle(idToken: string) {
-    const credential = GoogleAuthProvider.credential(idToken)
-    const userCredential: UserCredential = await signInWithCredential(auth, credential)
+    const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password)
+    const idToken = await userCredential.user.getIdToken()
     return {
       uid: userCredential.user.uid,
       email: userCredential.user.email,
-      displayName: userCredential.user.displayName
+      idToken
     }
+  },
+  async sendPasswordReset(email: string) {
+    await sendPasswordResetEmail(auth, email)
   }
 }

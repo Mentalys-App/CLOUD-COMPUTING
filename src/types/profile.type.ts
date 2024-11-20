@@ -1,20 +1,8 @@
-import { Gender } from '@prisma/client'
-
-export interface IProfile {
-  firebaseId: string
+export interface ProfileRequestBody {
   username: string
-  profile_pic?: string | undefined
+  profile_pic?: string
   full_name: string
-  birth_date: Date
+  birth_date: string
   location: string
-  gender: Gender
-}
-
-export interface UpdateProfileData {
-  username?: string
-  profile_pic?: string | null
-  full_name?: string
-  birth_date?: Date | null
-  location?: string
-  gender?: Gender
+  gender: 'MALE' | 'FEMALE'
 }
