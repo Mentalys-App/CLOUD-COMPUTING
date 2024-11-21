@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express'
-import { AuthenticatedRequest, createProfile } from '../controllers/profile.controller'
+import { createProfile } from '../controllers/profile.controller'
 import { authenticateUser } from '../middleware/auth.middleware'
+import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
 
 const profileRouter: Router = Router()
 
