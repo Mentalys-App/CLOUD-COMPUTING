@@ -46,11 +46,13 @@
   "dependencies": {
     "@firebase/firestore": "^4.7.4",
     "@types/multer": "^1.4.12",
+    "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "firebase": "^11.0.1",
     "firebase-admin": "^12.7.0",
+    "form-data": "^4.0.1",
     "joi": "^17.13.3",
     "multer": "^1.4.5-lts.1",
     "tsconfig-paths": "^4.2.0",

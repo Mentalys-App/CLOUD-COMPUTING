@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { AuthError, AuthErrorCodes } from 'firebase/auth'
 import { AppError } from '@/utils/AppError'
 
-const handleAuthError = (err: unknown, req: Request, res: Response, next: NextFunction) => {
+const firebaseErrorHandler = (err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (!(err instanceof Error)) {
     return next(AppError('Terjadi kesalahan internal server', 500))
   }
@@ -65,4 +65,4 @@ const handleAuthError = (err: unknown, req: Request, res: Response, next: NextFu
   return next(AppError('Terjadi kesalahan internal server', 500))
 }
 
-export default handleAuthError
+export default firebaseErrorHandler
