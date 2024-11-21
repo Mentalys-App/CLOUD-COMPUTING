@@ -4,7 +4,7 @@ import { profileService } from '@/services/profile.service'
 import { profileValidationSchema } from '@/validations/profile.validation'
 import { formatJoiError } from '@/utils/joiValidation'
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import { db } from '@/config/firebaseConfig'
+import { db } from '@/config/firebase.config'
 
 export interface AuthenticatedRequest extends Request {
   user: {
