@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { loginUser, registerUser, resetPassword } from '../controllers/auth.controller'
+import firebaseErrorHandler from '@/middleware/firebaseErrorHandler'
 
 const authRouter: Router = Router()
 
@@ -15,5 +16,6 @@ authRouter.post(
     resetPassword(req, res, next)
   }
 )
+authRouter.use(firebaseErrorHandler)
 
 export default authRouter
