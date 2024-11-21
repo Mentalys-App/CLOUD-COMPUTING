@@ -3,10 +3,8 @@ import authRouter from './auth.route'
 import { notFound } from '@/middleware/error/notFound'
 import { globalErrorHandler } from '@/middleware/error/error'
 import { authenticateUser } from '@/middleware/auth.middleware'
-import handleAuthError from '@/middleware/authHandler.middleware'
 import profileRouter from './profile.route'
 import mlRouter from './ml.route'
-// import profileRouter from './profile.route'
 
 const app: Router = Router()
 
@@ -26,8 +24,8 @@ app.get(
 app.use('/api/auth', authRouter)
 // create profile dan update profile
 app.use('/api/user', profileRouter)
+// API untuk ML
 app.use('/api/ml', mlRouter)
-app.use(handleAuthError)
 app.use('*', notFound)
 app.use(globalErrorHandler)
 export default app
