@@ -1,16 +1,11 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 import { ProfileRequestBody } from '@/types/profile.type'
 import { profileService } from '@/services/profile.service'
 import { profileValidationSchema } from '@/validations/profile.validation'
 import { formatJoiError } from '@/utils/joiValidation'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/config/firebase.config'
-
-export interface AuthenticatedRequest extends Request {
-  user: {
-    uid: string
-  }
-}
+import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
 
 export const createProfile = async (
   req: AuthenticatedRequest,

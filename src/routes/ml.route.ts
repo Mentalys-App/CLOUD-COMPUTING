@@ -3,6 +3,7 @@ import { authenticateUser } from '../middleware/auth.middleware'
 import { handleAudioPrediction, handleQuizPrediction } from '@/controllers/ml.controller'
 import { uploadAudio } from '@/utils/uploadML'
 import handleAxiosError from '@/middleware/axiosErrorHandler'
+import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
 
 const mlRouter: Router = Router()
 
@@ -12,7 +13,7 @@ mlRouter.post(
     authenticateUser(req, res, next)
   },
   async (req: Request, res: Response, next: NextFunction) => {
-    handleQuizPrediction(req, res, next)
+    handleQuizPrediction(req as AuthenticatedRequest, res, next)
   }
 )
 
@@ -23,7 +24,7 @@ mlRouter.post(
   },
   uploadAudio.single('audio'),
   async (req: Request, res: Response, next: NextFunction) => {
-    handleAudioPrediction(req, res, next)
+    handleAudioPrediction(req as AuthenticatedRequest, res, next)
   }
 )
 mlRouter.use(handleAxiosError)
