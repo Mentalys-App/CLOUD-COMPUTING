@@ -1,9 +1,14 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 import { quizInputSchema, audioInputSchema } from '@/validations/ml.validation'
 import { mlService } from '@/services/ml.service'
 import { formatJoiError } from '@/utils/joiValidation'
+import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
 
-export const handleQuizPrediction = async (req: Request, res: Response, next: NextFunction) => {
+export const handleQuizPrediction = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { error } = quizInputSchema.validate(req.body)
     if (error) {
@@ -11,7 +16,8 @@ export const handleQuizPrediction = async (req: Request, res: Response, next: Ne
       return res.status(400).json(validationError)
     }
     const inputData = req.body
-    const prediction = await mlService.sendQuizPrediction(inputData)
+    const uid = req.user.uid
+    const prediction = await mlService.sendQuizPrediction(uid, inputData)
     return res.status(200).json({
       status: 'success',
       prediction
@@ -21,7 +27,11 @@ export const handleQuizPrediction = async (req: Request, res: Response, next: Ne
   }
 }
 
-export const handleAudioPrediction = async (req: Request, res: Response, next: NextFunction) => {
+export const handleAudioPrediction = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -41,7 +51,8 @@ export const handleAudioPrediction = async (req: Request, res: Response, next: N
       const validationError = formatJoiError(error)
       return res.status(400).json(validationError)
     }
-    const prediction = await mlService.sendAudioPrediction(audioFile)
+    const uid = req.user.uid
+    const prediction = await mlService.sendAudioPrediction(uid, audioFile)
     return res.status(200).json({
       status: 'success',
       prediction
