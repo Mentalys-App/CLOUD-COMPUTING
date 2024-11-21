@@ -1,4 +1,4 @@
-import { db } from '@/config/firebaseConfig'
+import { db } from '@/config/firebase.config'
 import { doc, setDoc } from 'firebase/firestore'
 import { ProfileRequestBody } from '@/types/profile.type'
 
