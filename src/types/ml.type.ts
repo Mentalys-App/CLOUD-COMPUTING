@@ -39,3 +39,8 @@ export interface PredictionResponse {
   prediction: string
   confidence: number
 }
+export interface HandwritingInputData {
+  buffer: Buffer
+  mimetype: string
+  originalname: string
+}

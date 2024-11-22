@@ -40,3 +40,13 @@ export const audioInputSchema = Joi.object({
       .required() // Maksimal 5MB
   }).required()
 })
+
+export const handwritingInputSchema = Joi.object({
+  file: Joi.object({
+    originalname: Joi.string().required(),
+    mimetype: Joi.string().valid('image/jpeg', 'image/jpg', 'image/png').required(),
+    size: Joi.number()
+      .max(5 * 1024 * 1024)
+      .required()
+  }).required()
+})
