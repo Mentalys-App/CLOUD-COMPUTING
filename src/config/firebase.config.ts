@@ -26,10 +26,11 @@ const firebaseConfig = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID
 }
+const bucketImage = process.env.FIREBASE_BUCKET_IMAGE
 
 const app = firebase.initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
-export const storage = getStorage(app)
+export const storage = getStorage(app, bucketImage)
 
 export { admin, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword }
