@@ -4,7 +4,9 @@
     "module": "commonjs",
     "rootDir": "./src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/middleware/*": ["./src/middleware/*"],
+      "@/docs/*": ["./src/docs/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "sourceMap": true,
