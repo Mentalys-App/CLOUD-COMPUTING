@@ -1,0 +1,520 @@
+openapi: 3.0.0
+info:
+  title: Mentalys REST API
+  version: 0.0.1
+  description: REST API for Mentalys Mental Health Application developed by Abdi Setiawan - c179b4ky0013
+  contact:
+    name: Abdi Setiawan 
+    email: c179b4ky0013@bangkit.academy
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+  - url: https://api.mentalys.com/api
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegistration:
+      type: object
+      required:
+        - email
+        - password
+        - confirmPassword
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        confirmPassword:
+          type: string
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    PasswordReset:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+
+    ProfileRequestBody:
+      type: object
+      required:
+        - username
+        - full_name
+        - birth_date
+        - location
+        - gender
+      properties:
+        username:
+          type: string
+          minLength: 5
+          maxLength: 30
+          description: Unique username for the user
+        profile_pic:
+          type: string
+          format: binary
+          description: Profile picture file (image)
+        full_name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          description: Full name of the user
+        birth_date:
+          type: string
+          format: date
+          description: Birth date of the user
+        location:
+          type: string
+          description: Location of the user
+        gender:
+          type: string
+          enum: [MALE, FEMALE]
+          description: Gender of the user
+
+    ProfileUpdateRequestBody:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 5
+          maxLength: 30
+          description: Unique username for the user
+        profile_pic:
+          type: string
+          format: binary
+          description: Profile picture file (image) (optional)
+        full_name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          description: Full name of the user
+        birth_date:
+          type: string
+          format: date
+          description: Birth date of the user
+        location:
+          type: string
+          description: Location of the user
+        gender:
+          type: string
+          enum: [MALE, FEMALE]
+          description: Gender of the user
+
+    QuizInputData:
+      type: object
+      required:
+        - age
+        - feeling_nervous
+        - panic
+        - breathing_rapidly
+        - sweating
+        - trouble_in_concentration
+        - having_trouble_in_sleeping
+        - having_trouble_with_work
+        - hopelessness
+        - anger
+        - over_react
+        - change_in_eating
+        - suicidal_thought
+        - feeling_tired
+        - close_friend
+        - social_media_addiction
+        - weight_gain
+        - introvert
+        - popping_up_stressful_memory
+        - having_nightmares
+        - avoids_people_or_activities
+        - feeling_negative
+        - trouble_concentrating
+        - blaming_yourself
+        - hallucinations
+        - repetitive_behaviour
+        - seasonally
+        - increased_energy
+      properties:
+        age:
+          type: integer
+          description: Age of the user
+        feeling_nervous:
+          type: boolean
+          description: Feeling nervous
+        panic:
+          type: boolean
+          description: Experiencing panic attacks
+        breathing_rapidly:
+          type: boolean
+          description: Breathing rapidly
+        sweating:
+          type: boolean
+          description: Excessive sweating
+        trouble_in_concentration:
+          type: boolean
+          description: Trouble concentrating
+        having_trouble_in_sleeping:
+          type: boolean
+          description: Trouble sleeping
+        having_trouble_with_work:
+          type: boolean
+          description: Trouble with work
+        hopelessness:
+          type: boolean
+          description: Feeling hopeless
+        anger:
+          type: boolean
+          description: Experiencing anger issues
+        over_react:
+          type: boolean
+          description: Overreacting to situations
+        change_in_eating:
+          type: boolean
+          description: Change in eating habits
+        suicidal_thought:
+          type: boolean
+          description: Having suicidal thoughts
+        feeling_tired:
+          type: boolean
+          description: Feeling tired or fatigued
+        close_friend:
+          type: boolean
+          description: Having a close friend
+        social_media_addiction:
+          type: boolean
+          description: Addiction to social media
+        weight_gain:
+          type: boolean
+          description: Experiencing weight gain
+        introvert:
+          type: boolean
+          description: Identifying as an introvert
+        popping_up_stressful_memory:
+          type: boolean
+          description: Popping up stressful memories
+        having_nightmares:
+          type: boolean
+          description: Having nightmares
+        avoids_people_or_activities:
+          type: boolean
+          description: Avoiding people or activities
+        feeling_negative:
+          type: boolean
+          description: Feeling negative emotions
+        trouble_concentrating:
+          type: boolean
+          description: Trouble concentrating
+        blaming_yourself:
+          type: boolean
+          description: Blaming yourself for problems
+        hallucinations:
+          type: boolean
+          description: Experiencing hallucinations
+        repetitive_behaviour:
+          type: boolean
+          description: Engaging in repetitive behavior
+        seasonally:
+          type: boolean
+          description: Seasonal mood changes
+        increased_energy:
+          type: boolean
+          description: Experiencing increased energy
+
+    AudioInputData:
+      type: object
+      required:
+        - originalname
+        - mimetype
+        - size
+      properties:
+        originalname:
+          type: string
+          description: The original name of the uploaded audio file
+        mimetype:
+          type: string
+          description: The MIME type of the uploaded audio file
+        size:
+          type: integer
+          description: The size of the uploaded audio file in bytes
+
+    HandwritingInputData:
+      type: object
+      required:
+        - originalname
+        - mimetype
+        - size
+      properties:
+        originalname:
+          type: string
+          description: The original name of the uploaded image file
+        mimetype:
+          type: string
+          description: The MIME type of the uploaded image file
+        size:
+          type: integer
+          description: The size of the uploaded image file in bytes
+
+    QuizResponse:
+      type: object
+      properties:
+        result:
+          type: string
+          description: Result of the quiz analysis
+        recommendations:
+          type: array
+          items:
+            type: string
+          description: List of recommendations based on the quiz results
+
+    AudioResponse:
+      type: object
+      properties:
+        prediction:
+          type: string
+          description: Prediction result from the audio analysis
+
+    HandwritingResponse:
+      type: object
+      properties:
+        prediction:
+          type: string
+          description: Prediction result from the handwriting analysis
+
+paths:
+  /auth/register:
+    post:
+      summary: User Registration
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: Registration Successful
+        '400':
+          description: Validation Error
+        '409':
+          description: Email Already Exists
+
+  /auth/login:
+    post:
+      summary: User Login
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login Successful
+        '401':
+          description: Invalid Credentials
+        '403':
+          description: Email Not Verified
+
+  /auth/reset-password:
+    post:
+      summary: Password Reset Request
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+      responses:
+        '200':
+          description: Password Reset Email Sent
+        '404':
+          description: Email Not Registered
+
+  /user/create:
+    post:
+      summary: Create User Profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 5
+                  maxLength: 30
+                profile_pic:
+                  type: string
+                  format: binary
+                full_name:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                birth_date:
+                  type: string
+                  format: date
+                location:
+                  type: string
+                gender:
+                  type: string
+                  enum: [MALE, FEMALE]
+      responses:
+        '201':
+          description: Profile Created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Validation Error
+        '409':
+          description: Username Already Exists
+
+  /user/update:
+    put:
+      summary: Update User Profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequestBody'
+      responses:
+        '200':
+          description: Profile Updated Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+        '400':
+          description: Validation Error
+        '404':
+          description: User Not Found
+
+  /ml/quiz:
+    post:
+      summary: Submit Quiz Data for Analysis
+      tags:
+        - Machine Learning
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizInputData'
+      responses:
+        '200':
+          description: Quiz Data Processed Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizResponse'
+        '400':
+          description: Validation Error
+        '500':
+          description: Internal Server Error
+
+  /ml/audio:
+    post:
+      summary: Upload Audio for Prediction
+      tags:
+        - Machine Learning
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                audio:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Audio Processed Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioResponse'
+        '400':
+          description: Validation Error
+        '500':
+          description: Internal Server Error
+
+  /ml/handwriting:
+    post:
+      summary: Upload Handwriting for Prediction
+      tags:
+        - Machine Learning
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Handwriting Processed Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandwritingResponse'
+        '400':
+          description: Validation Error
+        '500':
+          description: Internal Server Error

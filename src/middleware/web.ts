@@ -1,5 +1,6 @@
 import express, { type Application, type Request, type Response } from 'express'
 import appMiddleware from '../middleware'
+import { swaggerMiddleware } from './swagger'
 
 const web: Application = express()
 web.get('/', (req: Request, res: Response) => {
@@ -8,6 +9,7 @@ web.get('/', (req: Request, res: Response) => {
     message: 'Mentalys REST API running!'
   })
 })
+swaggerMiddleware(web)
 web.use(appMiddleware)
 
 export default web
