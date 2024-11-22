@@ -16,6 +16,7 @@ export const mlService = {
       prediction: response.data,
       timestamp: new Date().toISOString()
     })
+
     return response.data
   },
   async sendAudioPrediction(uid: string, audioData: AudioInputData): Promise<PredictionResponse> {
@@ -37,6 +38,32 @@ export const mlService = {
     await setDoc(doc(userPredictionsRef), {
       prediction: response.data,
       timestamp: new Date().toISOString()
+    })
+
+    return response.data
+  },
+  async sendHandwritingPrediction(
+    uid: string,
+    imageFile: Express.Multer.File
+  ): Promise<PredictionResponse> {
+    const formData = new FormData()
+    formData.append(
+      'file',
+      new Blob([imageFile.buffer], { type: imageFile.mimetype }),
+      imageFile.originalname
+    )
+    const response: AxiosResponse<PredictionResponse> = await axios.post(
+      MLConfig.HANDWRITING_MODEL_API_URL,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+    )
+    const userPredictionsRef = collection(db, `user_predictions/${uid}/handwriting_requests`)
+    await setDoc(doc(userPredictionsRef), {
+      prediction: response.data,
+      timestamp: new Date().toISOString(),
+      filename: imageFile.originalname
     })
 
     return response.data
