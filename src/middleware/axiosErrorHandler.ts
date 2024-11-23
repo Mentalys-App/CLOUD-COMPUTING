@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AxiosError } from 'axios'
-import { AppError } from '@/utils/AppError'
+import { AppError } from '../utils/AppError'
 
 const handleAxiosError = (err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (!(err instanceof Error)) {
