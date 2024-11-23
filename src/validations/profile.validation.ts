@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
 export const profileValidationSchema = Joi.object({
-  username: Joi.string().pattern(/^\S+$/).required().messages({
+  username: Joi.string().pattern(/^\S+$/).required().trim().min(5).max(30).messages({
     'any.required': 'Username is required',
     'string.min': 'Username must be at least 5 characters long',
     'string.max': 'Username must be at most 30 characters long',
@@ -9,8 +9,8 @@ export const profileValidationSchema = Joi.object({
     'string.empty': 'Username cannot be empty',
     'string.pattern.base': 'Username must be a single word without spaces'
   }),
-  profile_pic: Joi.string().optional().allow(''),
-  full_name: Joi.string().required().min(3).max(50).messages({
+  profile_pic: Joi.string().optional().allow(null),
+  full_name: Joi.string().required().min(3).max(50).trim().messages({
     'string.min': 'Full name must be at least 3 characters long',
     'string.max': 'Full name must be at most 50 characters long',
     'any.required': 'Full name is required',
@@ -18,10 +18,10 @@ export const profileValidationSchema = Joi.object({
     'string.empty': 'Full name cannot be empty'
   }),
   birth_date: Joi.date().max('now').required().messages({
-    'date.max': 'Tanggal lahir tidak valid',
-    'any.required': 'Tanggal lahir wajib diisi'
+    'date.max': 'Birth date is not valid',
+    'any.required': 'Birth date is required'
   }),
-  location: Joi.string().required().messages({
+  location: Joi.string().required().trim().messages({
     'any.required': 'Location is required',
     'string.base': 'Location must be a string',
     'string.empty': 'Location cannot be empty'
@@ -32,3 +32,8 @@ export const profileValidationSchema = Joi.object({
     'any.only': 'Gender must be either MALE or FEMALE'
   })
 })
+
+export const profileUpdateValidationSchema = profileValidationSchema.fork(
+  ['username', 'full_name', 'birth_date', 'location', 'gender'],
+  (schema) => schema.optional()
+)
