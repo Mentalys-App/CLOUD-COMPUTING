@@ -1,8 +1,8 @@
-import { db } from '@/config/firebase.config'
-import { storage } from '@/config/firebase.config'
+import { db } from '../config/firebase.config'
+import { storage } from '../config/firebase.config'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { ProfileRequestBody } from '@/types/profile.type'
+import { ProfileRequestBody } from '../types/profile.type'
 
 export const profileService = {
   async createProfile(
@@ -68,5 +68,15 @@ export const profileService = {
 
     await setDoc(profileRef, data)
     return data
+  },
+  async getProfile(uid: string) {
+    const profileRef = doc(db, 'profiles', uid)
+    const profileSnap = await getDoc(profileRef)
+
+    if (!profileSnap.exists()) {
+      return null
+    }
+
+    return profileSnap.data()
   }
 }

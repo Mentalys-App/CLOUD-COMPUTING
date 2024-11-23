@@ -1,14 +1,14 @@
 import { Response, NextFunction } from 'express'
-import { ProfileRequestBody } from '@/types/profile.type'
-import { profileService } from '@/services/profile.service'
+import { ProfileRequestBody } from '../types/profile.type'
+import { profileService } from '../services/profile.service'
 import {
   profileValidationSchema,
   profileUpdateValidationSchema
-} from '@/validations/profile.validation'
-import { formatJoiError } from '@/utils/joiValidation'
+} from '../validations/profile.validation'
+import { formatJoiError } from '../utils/joiValidation'
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import { db } from '@/config/firebase.config'
-import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
+import { db } from '../config/firebase.config'
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest.type'
 
 export const createProfile = async (
   req: AuthenticatedRequest,
@@ -45,7 +45,6 @@ export const createProfile = async (
       data: createdProfile
     })
   } catch (error) {
-    console.error(error)
     next(error)
   }
 }
@@ -93,6 +92,31 @@ export const updateProfile = async (
         message: 'Profile not found'
       })
     }
+    next(error)
+  }
+}
+
+export const getProfile = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const uid = req.user.uid
+    const profile = await profileService.getProfile(uid)
+
+    if (!profile) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Profile not found'
+      })
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      data: profile
+    })
+  } catch (error) {
     next(error)
   }
 }
