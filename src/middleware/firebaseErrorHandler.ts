@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AuthError, AuthErrorCodes } from 'firebase/auth'
-import { AppError } from '@/utils/AppError'
+import { AppError } from '../utils/AppError'
 
 const firebaseErrorHandler = (err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (!(err instanceof Error)) {

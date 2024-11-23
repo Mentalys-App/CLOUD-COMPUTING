@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { AppError } from '@/utils/AppError'
-import { AuthRequestBody } from '@/types/authRequest.type'
-import { authService } from '@/services/auth.service'
-import { registrationSchema } from '@/validations/auth.validation'
-import { formatJoiError } from '@/utils/joiValidation'
-import { collection, getDocs, query, where } from '@firebase/firestore'
-import { auth, db } from '@/config/firebase.config'
+import { AppError } from '../utils/AppError'
+import { AuthRequestBody } from '../types/authRequest.type'
+import { authService } from '../services/auth.service'
+import { registrationSchema } from '../validations/auth.validation'
+import { formatJoiError } from '../utils/joiValidation'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { auth, db } from '../config/firebase.config'
 
 export const registerUser = async (
   req: Request<AuthRequestBody>,

@@ -1,8 +1,8 @@
 import { Request, Router, Response, NextFunction } from 'express'
 import authRouter from './auth.route'
-import { notFound } from '@/middleware/error/notFound'
-import { globalErrorHandler } from '@/middleware/error/error'
-import { authenticateUser } from '@/middleware/auth.middleware'
+import { notFound } from '../middleware/error/notFound'
+import { globalErrorHandler } from '../middleware/error/error'
+import { authenticateUser } from '../middleware/auth.middleware'
 import profileRouter from './profile.route'
 import mlRouter from './ml.route'
 
