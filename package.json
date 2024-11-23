@@ -9,13 +9,13 @@
     "email": "bedikadiryt@gmail.com"
   },
   "scripts": {
-    "prod": "node ./dist/index.js",
-    "build": "tsc && cp .env ./dist/.env",
+    "build": "tsc && copyfiles -u 1 src/docs/swagger.yaml dist/",
+    "start": "node dist/index.js",
     "lint": "eslint src/**/*.ts",
     "format": "npx prettier . --write",
-    "prepare": "husky install",
     "dev": "npx nodemon",
-    "start": "yarn build && yarn prod"
+    "start:prod": "npx ts-node -r tsconfig-paths/register src/index.ts",
+    "deploy": "gcloud app deploy"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
@@ -28,6 +28,7 @@
     "@types/yamljs": "^0.2.34",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
+    "copyfiles": "^2.4.1",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -47,6 +48,7 @@
   },
   "dependencies": {
     "@firebase/firestore": "^4.7.4",
+    "@google-cloud/secret-manager": "^5.6.0",
     "@types/multer": "^1.4.12",
     "axios": "^1.7.7",
     "cors": "^2.8.5",

@@ -3,10 +3,10 @@ import {
   quizInputSchema,
   audioInputSchema,
   handwritingInputSchema
-} from '@/validations/ml.validation'
-import { mlService } from '@/services/ml.service'
-import { formatJoiError } from '@/utils/joiValidation'
-import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
+} from '../validations/ml.validation'
+import { mlService } from '../services/ml.service'
+import { formatJoiError } from '../utils/joiValidation'
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest.type'
 
 export const handleQuizPrediction = async (
   req: AuthenticatedRequest,

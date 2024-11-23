@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { QuizInputData, AudioInputData, PredictionResponse } from '@/types/ml.type'
-import { MLConfig } from '@/config/ml.config'
+import { QuizInputData, AudioInputData, PredictionResponse } from '../types/ml.type'
+import { MLConfig } from '../config/ml.config'
 import { collection, doc, setDoc } from 'firebase/firestore'
-import { db } from '@/config/firebase.config'
+import { db } from '../config/firebase.config'
 
 export const mlService = {
   async sendQuizPrediction(uid: string, inputData: QuizInputData): Promise<PredictionResponse> {

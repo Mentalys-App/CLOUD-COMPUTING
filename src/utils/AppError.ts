@@ -1,4 +1,4 @@
-import { IAppError } from '@/types/error.type'
+import { IAppError } from '../types/error.type'
 
 // Fungsi untuk membuat objek kesalahan terstruktur
 export const AppError = (message: string, statusCode: number): IAppError => {

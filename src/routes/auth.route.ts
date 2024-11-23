@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { loginUser, registerUser, resetPassword } from '../controllers/auth.controller'
-import firebaseErrorHandler from '@/middleware/firebaseErrorHandler'
+import firebaseErrorHandler from '../middleware/firebaseErrorHandler'
 
 const authRouter: Router = Router()
 
