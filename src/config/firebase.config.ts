@@ -1,3 +1,4 @@
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import * as admin from 'firebase-admin'
 import * as firebase from 'firebase/app'
 import {
@@ -10,14 +11,7 @@ import 'dotenv/config'
 import { getFirestore } from '@firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-const serviceAccount = require('./serviceAccountKey.json')
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.FIREBASE_DATABASE_URL
-})
-
+// Firebase Config
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -28,9 +22,38 @@ const firebaseConfig = {
 }
 const bucketImage = process.env.FIREBASE_BUCKET_IMAGE
 
+// Secret Manager Client
+const secretClient = new SecretManagerServiceClient()
+
+// Load Service Account Key from Secret Manager
+async function getServiceAccountKey() {
+  const [version] = await secretClient.accessSecretVersion({
+    name: `projects/62132417529/secrets/SERVICE_ACCOUNT_KEY/versions/1`
+  })
+
+  const payload = version.payload?.data?.toString()
+  if (!payload) {
+    throw new Error('Failed to load service account key from Secret Manager')
+  }
+  return JSON.parse(payload)
+}
+
+// Initialize Firebase Admin
+;(async () => {
+  const serviceAccount = await getServiceAccountKey()
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DATABASE_URL
+  })
+
+  console.log('Firebase Admin Initialized')
+})()
+
+// Initialize Firebase Client
 const app = firebase.initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 export const storage = getStorage(app, bucketImage)
 
+// Export Firebase Auth & Admin SDK
 export { admin, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword }
