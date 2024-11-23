@@ -21,6 +21,66 @@ components:
       bearerFormat: JWT
 
   schemas:
+    UserProfile:
+      type: object
+      required:
+        - username
+        - full_name
+        - birth_date
+        - location
+        - gender
+      properties:
+        username:
+          type: string
+          description: Username unik pengguna
+          example: johndoe123
+          minLength: 5
+          maxLength: 30
+
+        profile_pic:
+          type: string
+          description: URL gambar profil pengguna
+          example: https://storage.googleapis.com/mentalys-bucket/profile_images/user123/profile.jpg
+          nullable: true
+
+        full_name:
+          type: string
+          description: Nama lengkap pengguna
+          example: John Doe
+          minLength: 3
+          maxLength: 50
+
+        birth_date:
+          type: string
+          format: date
+          description: Tanggal lahir pengguna
+          example: 1990-01-01
+
+        location:
+          type: string
+          description: Lokasi pengguna
+          example: Jakarta, Indonesia
+
+        gender:
+          type: string
+          description: Jenis kelamin pengguna
+          enum:
+            - MALE
+            - FEMALE
+          example: MALE
+
+        created_at:
+          type: string
+          format: date-time
+          description: Waktu pembuatan profil
+          example: 2023-06-15T10:30:00Z
+
+        updated_at:
+          type: string
+          format: date-time
+          description: Waktu terakhir profil diperbarui
+          example: 2023-06-15T10:30:00Z
+
     UserRegistration:
       type: object
       required:
@@ -436,6 +496,52 @@ paths:
         '404':
           description: User Not Found
 
+  /user/profile:
+    get:
+      summary: Get User Profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profile Retrieved Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized (Invalid or missing token)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Unauthorized access
+        '404':
+          description: Profile Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Profile not found
   /ml/quiz:
     post:
       summary: Submit Quiz Data for Analysis
