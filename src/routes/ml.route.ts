@@ -4,10 +4,10 @@ import {
   handleAudioPrediction,
   handleHandwritingPrediction,
   handleQuizPrediction
-} from '@/controllers/ml.controller'
-import { uploadAudio, uploadImage } from '@/utils/uploadML'
-import handleAxiosError from '@/middleware/axiosErrorHandler'
-import { AuthenticatedRequest } from '@/types/AuthenticatedRequest.type'
+} from '../controllers/ml.controller'
+import { uploadAudio, uploadImage } from '../utils/uploadML'
+import handleAxiosError from '../middleware/axiosErrorHandler'
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest.type'
 
 const mlRouter: Router = Router()
 
