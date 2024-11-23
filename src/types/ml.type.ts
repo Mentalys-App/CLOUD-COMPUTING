@@ -44,3 +44,37 @@ export interface HandwritingInputData {
   mimetype: string
   originalname: string
 }
+
+export enum MLRequestType {
+  QUIZ = 'quiz_requests',
+  HANDWRITING = 'handwriting_requests',
+  AUDIO = 'audio_requests'
+}
+
+export interface MLHistoryQuery {
+  type: MLRequestType
+  page?: number
+  limit?: number
+  startDate?: string
+  endDate?: string
+  sortBy?: 'timestamp' | 'prediction'
+  sortOrder?: 'asc' | 'desc'
+}
+
+export interface MLHistoryResponse {
+  history: MLHistoryItem[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
+export interface MLHistoryItem {
+  id: string
+  prediction: {
+    result: string
+  }
+  inputData: Record<string, unknown>
+  timestamp: string
+  metadata?: Record<string, unknown>
+}
