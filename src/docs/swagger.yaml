@@ -8,11 +8,10 @@ info:
     email: c179b4ky0013@bangkit.academy
 
 servers:
-  - url: https://mentalys-restapi-62132417529.asia-southeast2.run.app/api
-    description: Production server
   - url: http://localhost:3000/api
     description: Local development server
-
+  - url: https://api.mentalys.com/api
+    description: Production server
 
 components:
   securitySchemes:
