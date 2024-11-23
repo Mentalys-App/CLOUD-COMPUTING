@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { authenticateUser } from '../middleware/auth.middleware'
 import {
+  getMLRequestHistory,
   handleAudioPrediction,
   handleHandwritingPrediction,
   handleQuizPrediction
@@ -40,6 +41,16 @@ mlRouter.post(
   uploadImage.single('file'),
   async (req: Request, res: Response, next: NextFunction) => {
     handleHandwritingPrediction(req as AuthenticatedRequest, res, next)
+  }
+)
+
+mlRouter.get(
+  '/history',
+  (req: Request, res: Response, next: NextFunction) => {
+    authenticateUser(req, res, next)
+  },
+  async (req: Request, res: Response, next: NextFunction) => {
+    getMLRequestHistory(req as AuthenticatedRequest, res, next)
   }
 )
 
