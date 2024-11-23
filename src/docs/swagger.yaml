@@ -215,7 +215,7 @@ components:
         - increased_energy
       properties:
         age:
-          type: integer
+          type: string
           description: Age of the user
         feeling_nervous:
           type: boolean
@@ -624,3 +624,226 @@ paths:
           description: Validation Error
         '500':
           description: Internal Server Error
+
+  /ml/history:    # Removed redundant /api prefix since it's already in the server URL
+    get:
+      summary: Riwayat Permintaan Machine Learning
+      description: >
+        Endpoint untuk mengambil riwayat permintaan prediksi Machine Learning 
+        berdasarkan tipe spesifik untuk pengguna yang terautentikasi.
+      
+      tags:
+        - Machine Learning History
+      
+      security:
+        - bearerAuth: []    # Changed to match the defined securityScheme name
+      
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum: 
+              - quiz_requests
+              - handwriting_requests
+              - audio_requests
+          description: Tipe permintaan Machine Learning yang ingin diambil riwayatnya
+        
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Nomor halaman untuk paginasi
+          required: false
+        
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Jumlah item per halaman
+          required: false
+        
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+          description: Tanggal awal untuk filter riwayat (format ISO 8601)
+          required: false
+        
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: Tanggal akhir untuk filter riwayat (format ISO 8601)
+          required: false
+        
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - prediction
+            default: timestamp
+          description: Kolom untuk pengurutan riwayat
+          required: false
+        
+        - in: query
+          name: sortOrder
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          description: Arah pengurutan (ascending atau descending)
+          required: false
+
+      responses:
+        '200':
+          description: Riwayat permintaan Machine Learning berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID unik permintaan
+                          example: "unique_request_id"
+                        prediction:
+                          type: object
+                          properties:
+                            result:
+                              type: string
+                              description: Hasil prediksi
+                              example: "Anxiety"
+                            confidence:
+                              type: number
+                              format: float
+                              description: Tingkat kepercayaan prediksi
+                              example: 0.85
+                        inputData:
+                          type: object
+                          description: Data input yang digunakan untuk prediksi
+                          additionalProperties: true
+                        timestamp:
+                          type: string
+                          format: date-time
+                          description: Waktu permintaan dibuat
+                          example: "2023-06-15T10:30:00Z"
+                        metadata:
+                          type: object
+                          description: Metadata tambahan terkait permintaan
+                          additionalProperties: true
+                  page:
+                    type: integer
+                    description: Halaman saat ini
+                    example: 1
+                  limit:
+                    type: integer
+                    description: Jumlah item per halaman
+                    example: 10
+                  total:
+                    type: integer
+                    description: Total jumlah item
+                    example: 50
+                  totalPages:
+                    type: integer
+                    description: Total halaman
+                    example: 5
+              examples:
+                QuizRequestHistory:
+                  summary: Contoh riwayat permintaan quiz
+                  value:
+                    status: success
+                    history:
+                      - id: "unique_request_id_1"
+                        prediction:
+                          result: "Anxiety"
+                          confidence: 0.85
+                        inputData:
+                          question1: "Seberapa sering Anda merasa cemas?"
+                          answer1: "Sering"
+                        timestamp: "2023-06-15T10:30:00Z"
+                        metadata:
+                          source: "Mobile App"
+                    total: 50
+                    page: 1
+                    limit: 10
+                    totalPages: 5
+                
+                HandwritingRequestHistory:
+                  summary: Contoh riwayat permintaan handwriting
+                  value:
+                    status: success
+                    history:
+                      - id: "unique_request_id_2"
+                        prediction:
+                          result: "Depresi Ringan"
+                          confidence: 0.72
+                        inputData:
+                          imageUrl: "https://example.com/handwriting.jpg"
+                        timestamp: "2023-06-16T14:45:00Z"
+                        metadata:
+                          fileSize: "256 KB"
+                    total: 50
+                    page: 1
+                    limit: 10
+                    totalPages: 5
+        
+        '400':
+          description: Kesalahan validasi parameter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: "Validation error"
+              examples:
+                InvalidType:
+                  summary: Tipe permintaan tidak valid
+                  value:
+                    status: fail
+                    message: "Invalid ML request type"
+                
+                InvalidDateFormat:
+                  summary: Format tanggal tidak valid
+                  value:
+                    status: fail
+                    message: "Invalid date format. Use ISO 8601"
+        
+        '401':
+          description: Tidak terautentikasi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: "Unauthorized - No token provided"

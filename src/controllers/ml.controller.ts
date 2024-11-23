@@ -7,7 +7,7 @@ import {
 import { mlService } from '../services/ml.service'
 import { formatJoiError } from '../utils/joiValidation'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest.type'
-import { MLHistoryQuery, MLRequestType } from '@/types/ml.type'
+import { MLHistoryQuery, MLRequestType } from '../types/ml.type'
 
 export const handleQuizPrediction = async (
   req: AuthenticatedRequest,
