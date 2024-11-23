@@ -7,6 +7,7 @@ import {
 import { mlService } from '../services/ml.service'
 import { formatJoiError } from '../utils/joiValidation'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest.type'
+import { MLHistoryQuery, MLRequestType } from '@/types/ml.type'
 
 export const handleQuizPrediction = async (
   req: AuthenticatedRequest,
@@ -95,6 +96,42 @@ export const handleHandwritingPrediction = async (
     return res.status(200).json({
       status: 'success',
       prediction
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getMLRequestHistory = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const uid = req.user.uid
+    const { type, page, limit, startDate, endDate, sortBy, sortOrder } = req.query
+
+    if (!Object.values(MLRequestType).includes(type as MLRequestType)) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Invalid ML request type'
+      })
+    }
+
+    const queryOptions: MLHistoryQuery = {
+      type: type as MLRequestType,
+      page: page ? Number(page) : undefined,
+      limit: limit ? Number(limit) : undefined,
+      startDate: startDate as string,
+      endDate: endDate as string,
+      sortBy: sortBy as 'timestamp' | 'prediction',
+      sortOrder: sortOrder as 'asc' | 'desc'
+    }
+
+    const history = await mlService.getMLRequestHistory(uid, queryOptions)
+    return res.status(200).json({
+      status: 'success',
+      ...history
     })
   } catch (error) {
     next(error)
