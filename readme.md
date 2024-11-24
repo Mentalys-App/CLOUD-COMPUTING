@@ -62,6 +62,7 @@ POST /ml/handwriting  // Submit handwriting sample
 // Profile Management
 GET  /user/profile    // Get user information
 PUT  /user/update     // Update profile
+POST  /user/create     // Create profile
 ```
 
 ## Security
