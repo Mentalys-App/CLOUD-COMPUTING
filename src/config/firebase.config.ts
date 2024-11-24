@@ -28,7 +28,7 @@ const secretClient = new SecretManagerServiceClient()
 // Load Service Account Key from Secret Manager
 async function getServiceAccountKey() {
   const [version] = await secretClient.accessSecretVersion({
-    name: `projects/62132417529/secrets/SERVICE_ACCOUNT_KEY/versions/1`
+    name: `projects/${process.env.PROJECT_ID}/secrets/${process.env.SECRET_ID}/versions/${process.env.SECRET_VERSION}`
   })
 
   const payload = version.payload?.data?.toString()
