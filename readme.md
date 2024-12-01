@@ -46,21 +46,35 @@ Development: http://localhost:3000/api-docs
 
 ### Main Endpoints
 
-```typescript
-// Authentication
-POST /auth/register    // Create new account
-POST /auth/login       // Get access token
+```bash
+### Authentication
+| Method | Endpoint              | Description               |
+|--------|-----------------------|---------------------------|
+| POST   | `/auth/register`      | User Registration         |
+| POST   | `/auth/login`         | User Login                |
+| POST   | `/auth/reset-password`| Password Reset Request    |
 
-// Analysis
-POST /ml/quiz         // Submit mental health questionnaire
-POST /ml/audio        // Upload voice recording
-POST /ml/handwriting  // Submit handwriting sample
-GET  /ml/history      // Get User History
-GET  /ml/all-history  // Get All User History
+### Profile Management
+| Method | Endpoint              | Description               |
+|--------|-----------------------|---------------------------|
+| POST   | `/user/create`        | Create User Profile       |
+| PUT    | `/user/update`        | Update User Profile       |
+| GET    | `/user/profile`       | Get User Profile          |
 
-// Profile Management
-GET  /user/profile    // Get user information
-PUT  /user/update     // Update profile
+### Machine Learning
+| Method | Endpoint              | Description                        |
+|--------|-----------------------|------------------------------------|
+| POST   | `/ml/quiz`            | Submit Quiz Data for Analysis      |
+| POST   | `/ml/audio`           | Upload Audio for Prediction        |
+| POST   | `/ml/handwriting`     | Upload Handwriting for Prediction  |
+
+### Machine Learning History
+| Method | Endpoint              | Description                                |
+|--------|-----------------------|--------------------------------------------|
+| GET    | `/ml/history`         | Retrieve Machine Learning Request History |
+| GET    | `/ml/all-history`     | Retrieve All Machine Learning Requests    |
+
+
 ```
 
 ## Security
