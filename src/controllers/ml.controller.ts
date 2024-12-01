@@ -2,7 +2,8 @@ import { Response, NextFunction } from 'express'
 import {
   quizInputSchema,
   audioInputSchema,
-  handwritingInputSchema
+  handwritingInputSchema,
+  isValidISODate
 } from '../validations/ml.validation'
 import { mlService } from '../services/ml.service'
 import { formatJoiError } from '../utils/joiValidation'
@@ -129,6 +130,60 @@ export const getMLRequestHistory = async (
     }
 
     const history = await mlService.getMLRequestHistory(uid, queryOptions)
+    return res.status(200).json({
+      status: 'success',
+      ...history
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getAllMLRequestHistory = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const uid = req.user.uid
+    const { page, limit, startDate, endDate, sortBy, sortOrder } = req.query
+    if (startDate && !isValidISODate(startDate.toString())) {
+      return res.status(400).json({
+        status: 'fail',
+        message:
+          'Invalid start date format. Please use ISO 8601 format (e.g., 2024-01-15 or 2024-01-15T10:30:00Z)'
+      })
+    }
+
+    if (endDate && !isValidISODate(endDate.toString())) {
+      return res.status(400).json({
+        status: 'fail',
+        message:
+          'Invalid end date format. Please use ISO 8601 format (e.g., 2024-01-15 or 2024-01-15T10:30:00Z)'
+      })
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(String(startDate))
+      const end = new Date(String(endDate))
+
+      if (start > end) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Invalid date range. Start date must be before end date'
+        })
+      }
+    }
+    const queryOptions: Omit<MLHistoryQuery, 'type'> = {
+      page: page ? Number(page) : undefined,
+      limit: limit ? Number(limit) : undefined,
+      startDate: startDate as string,
+      endDate: endDate as string,
+      sortBy: sortBy as 'timestamp' | 'prediction',
+      sortOrder: sortOrder as 'asc' | 'desc'
+    }
+
+    const history = await mlService.getAllMLRequestHistory(uid, queryOptions)
     return res.status(200).json({
       status: 'success',
       ...history
