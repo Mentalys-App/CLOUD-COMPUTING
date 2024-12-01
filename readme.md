@@ -33,8 +33,7 @@ For complete API documentation, visit Swagger UI:
 ```
 Development: http://localhost:3000/api-docs
 ```
-or Download this full documentation:
-Klik untuk mengunduh dokumentasi lengkap: [Download Rest API Documentation](https://github.com/user-attachments/files/17968494/documentation.rest.api.pdf)
+or Download this full documentation: [Download Rest API Documentation](https://github.com/user-attachments/files/17968494/documentation.rest.api.pdf)
 
 ### Core Features
 
