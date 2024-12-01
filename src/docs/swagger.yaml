@@ -8,7 +8,7 @@ info:
     email: c179b4ky0013@bangkit.academy
 
 servers:
-  - url: https://mentalys-restapi-62132417529.asia-southeast2.run.app/api
+  - url: https://mentalys-restapi-🗿rahasia.com/api
     description: Production server
   - url: http://localhost:3000/api
     description: Local development server
@@ -625,31 +625,31 @@ paths:
         '500':
           description: Internal Server Error
 
-  /ml/history:    # Removed redundant /api prefix since it's already in the server URL
+  /ml/history: # Removed redundant /api prefix since it's already in the server URL
     get:
       summary: Riwayat Permintaan Machine Learning
       description: >
         Endpoint untuk mengambil riwayat permintaan prediksi Machine Learning 
         berdasarkan tipe spesifik untuk pengguna yang terautentikasi.
-      
+
       tags:
         - Machine Learning History
-      
+
       security:
-        - bearerAuth: []    # Changed to match the defined securityScheme name
-      
+        - bearerAuth: [] # Changed to match the defined securityScheme name
+
       parameters:
         - in: query
           name: type
           required: true
           schema:
             type: string
-            enum: 
+            enum:
               - quiz_requests
               - handwriting_requests
               - audio_requests
           description: Tipe permintaan Machine Learning yang ingin diambil riwayatnya
-        
+
         - in: query
           name: page
           schema:
@@ -658,7 +658,7 @@ paths:
             default: 1
           description: Nomor halaman untuk paginasi
           required: false
-        
+
         - in: query
           name: limit
           schema:
@@ -668,7 +668,7 @@ paths:
             default: 10
           description: Jumlah item per halaman
           required: false
-        
+
         - in: query
           name: startDate
           schema:
@@ -676,7 +676,7 @@ paths:
             format: date
           description: Tanggal awal untuk filter riwayat (format ISO 8601)
           required: false
-        
+
         - in: query
           name: endDate
           schema:
@@ -684,7 +684,7 @@ paths:
             format: date
           description: Tanggal akhir untuk filter riwayat (format ISO 8601)
           required: false
-        
+
         - in: query
           name: sortBy
           schema:
@@ -695,7 +695,7 @@ paths:
             default: timestamp
           description: Kolom untuk pengurutan riwayat
           required: false
-        
+
         - in: query
           name: sortOrder
           schema:
@@ -726,14 +726,14 @@ paths:
                         id:
                           type: string
                           description: ID unik permintaan
-                          example: "unique_request_id"
+                          example: 'unique_request_id'
                         prediction:
                           type: object
                           properties:
                             result:
                               type: string
                               description: Hasil prediksi
-                              example: "Anxiety"
+                              example: 'Anxiety'
                             confidence:
                               type: number
                               format: float
@@ -747,7 +747,7 @@ paths:
                           type: string
                           format: date-time
                           description: Waktu permintaan dibuat
-                          example: "2023-06-15T10:30:00Z"
+                          example: '2023-06-15T10:30:00Z'
                         metadata:
                           type: object
                           description: Metadata tambahan terkait permintaan
@@ -774,40 +774,40 @@ paths:
                   value:
                     status: success
                     history:
-                      - id: "unique_request_id_1"
+                      - id: 'unique_request_id_1'
                         prediction:
-                          result: "Anxiety"
+                          result: 'Anxiety'
                           confidence: 0.85
                         inputData:
-                          question1: "Seberapa sering Anda merasa cemas?"
-                          answer1: "Sering"
-                        timestamp: "2023-06-15T10:30:00Z"
+                          question1: 'Seberapa sering Anda merasa cemas?'
+                          answer1: 'Sering'
+                        timestamp: '2023-06-15T10:30:00Z'
                         metadata:
-                          source: "Mobile App"
+                          source: 'Mobile App'
                     total: 50
                     page: 1
                     limit: 10
                     totalPages: 5
-                
+
                 HandwritingRequestHistory:
                   summary: Contoh riwayat permintaan handwriting
                   value:
                     status: success
                     history:
-                      - id: "unique_request_id_2"
+                      - id: 'unique_request_id_2'
                         prediction:
-                          result: "Depresi Ringan"
+                          result: 'Depresi Ringan'
                           confidence: 0.72
                         inputData:
-                          imageUrl: "https://example.com/handwriting.jpg"
-                        timestamp: "2023-06-16T14:45:00Z"
+                          imageUrl: 'https://example.com/handwriting.jpg'
+                        timestamp: '2023-06-16T14:45:00Z'
                         metadata:
-                          fileSize: "256 KB"
+                          fileSize: '256 KB'
                     total: 50
                     page: 1
                     limit: 10
                     totalPages: 5
-        
+
         '400':
           description: Kesalahan validasi parameter
           content:
@@ -820,20 +820,20 @@ paths:
                     example: fail
                   message:
                     type: string
-                    example: "Validation error"
+                    example: 'Validation error'
               examples:
                 InvalidType:
                   summary: Tipe permintaan tidak valid
                   value:
                     status: fail
-                    message: "Invalid ML request type"
-                
+                    message: 'Invalid ML request type'
+
                 InvalidDateFormat:
                   summary: Format tanggal tidak valid
                   value:
                     status: fail
-                    message: "Invalid date format. Use ISO 8601"
-        
+                    message: 'Invalid date format. Use ISO 8601'
+
         '401':
           description: Tidak terautentikasi
           content:
@@ -846,4 +846,189 @@ paths:
                     example: error
                   message:
                     type: string
-                    example: "Unauthorized - No token provided"
+                    example: 'Unauthorized - No token provided'
+
+  /ml/all-history:
+    get:
+      summary: Retrieve All Machine Learning Request History
+      tags:
+        - Machine Learning History
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number for pagination
+          required: false
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page
+          required: false
+
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+          description: Start date for filtering history (ISO 8601 format)
+          required: false
+
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: End date for filtering history (ISO 8601 format)
+          required: false
+
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum:
+              - timestamp
+            default: timestamp
+          description: Column to sort the history by
+          required: false
+
+        - in: query
+          name: sortOrder
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          description: Sort order (ascending or descending)
+          required: false
+
+      responses:
+        '200':
+          description: All ML request history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique request ID
+                          example: 'unique_request_id'
+                        type:
+                          type: string
+                          description: Type of ML request
+                          example: 'quiz_requests'
+                        prediction:
+                          type: object
+                          properties:
+                            result:
+                              type: string
+                              description: Prediction result
+                              example: 'Anxiety'
+                            confidence:
+                              type: number
+                              format: float
+                              description: Confidence level of the prediction
+                              example: 0.85
+                        inputData:
+                          type: object
+                          description: Input data used for the prediction
+                          additionalProperties: true
+                        timestamp:
+                          type: string
+                          format: date-time
+                          description: Time when the request was made
+                          example: '2023-06-15T10:30:00Z'
+                        metadata:
+                          type: object
+                          description: Additional metadata related to the request
+                          additionalProperties: true
+                  page:
+                    type: integer
+                    description: Current page number
+                    example: 1
+                  limit:
+                    type: integer
+                    description: Number of items per page
+                    example: 10
+                  total:
+                    type: integer
+                    description: Total number of items
+                    example: 50
+                  totalPages:
+                    type: integer
+                    description: Total number of pages
+                    example: 5
+              examples:
+                AllRequestHistory:
+                  summary: Example of all ML request history
+                  value:
+                    status: success
+                    history:
+                      - id: 'unique_request_id_1'
+                        type: 'quiz_requests'
+                        prediction:
+                          result: 'Anxiety'
+                          confidence: 0.85
+                        inputData:
+                          age: '30'
+                          feeling_nervous: true
+                        timestamp: '2023-06-15T10:30:00Z'
+                        metadata:
+                          source: 'Mobile App'
+                    total: 50
+                    page: 1
+                    limit: 10
+                    totalPages: 5
+
+        '400':
+          description: Parameter validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: 'Validation error'
+              examples:
+                InvalidDateFormat:
+                  summary: Invalid date format
+                  value:
+                    status: fail
+                    message: 'Invalid date format. Use ISO 8601'
+
+        '401':
+          description: Unauthorized (Invalid or missing token)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: 'Unauthorized - No token provided'
