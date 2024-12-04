@@ -4,6 +4,7 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signOut,
   UserCredential
 } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
@@ -40,5 +41,19 @@ export const authService = {
   },
   async sendPasswordReset(email: string) {
     await sendPasswordResetEmail(auth, email)
+  },
+  async deleteUser() {
+    const user = auth.currentUser
+    if (user) {
+      await user.delete()
+    }
+  },
+  async signOutUser() {
+    try {
+      await signOut(auth)
+    } catch (error) {
+      console.error('Error signing out:', error)
+      throw new Error('Failed to sign out')
+    }
   }
 }
