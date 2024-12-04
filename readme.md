@@ -58,9 +58,10 @@ or Download this full documentation: [Download Rest API Documentation](https://g
 ### Profile Management
 | Method | Endpoint              | Description               |
 |--------|-----------------------|---------------------------|
-| POST   | `/user/create`        | Create User Profile       |
-| PUT    | `/user/update`        | Update User Profile       |
-| GET    | `/user/profile`       | Get User Profile          |
+| POST   | `/user`               | Create User Profile       |
+| PUT    | `/user`               | Update User Profile       |
+| GET    | `/user`               | Get User Profile          |
+| POST   | `/signout`            | Log Out User          |
 
 ### Machine Learning
 | Method | Endpoint              | Description                        |
