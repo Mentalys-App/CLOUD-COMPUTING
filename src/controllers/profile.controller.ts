@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { ProfileRequestBody } from '../types/profile.type'
+import { ProfileRequestBody, ProfileRequestRegisterBody } from '../types/profile.type'
 import { profileService } from '../services/profile.service'
 import {
   profileValidationSchema,
@@ -23,7 +23,7 @@ export const createProfile = async (
     }
 
     const uid = req.user.uid
-    const profileData: ProfileRequestBody = req.body
+    const profileData: ProfileRequestRegisterBody = req.body
 
     const usernameQuery = query(
       collection(db, 'profiles'),
@@ -38,7 +38,7 @@ export const createProfile = async (
       })
     }
 
-    const createdProfile = await profileService.createProfile(uid, profileData, req.file)
+    const createdProfile = await profileService.createProfile(uid, profileData)
 
     return res.status(201).json({
       status: 'success',
@@ -55,6 +55,12 @@ export const updateProfile = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
+    if (!req.body) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'No data provided'
+      })
+    }
     const { error } = profileUpdateValidationSchema.validate(req.body)
     if (error) {
       const validationError = formatJoiError(error)
