@@ -2,33 +2,16 @@ import { db } from '../config/firebase.config'
 import { storage } from '../config/firebase.config'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { ProfileRequestBody } from '../types/profile.type'
+import { ProfileRequestBody, ProfileRequestRegisterBody } from '../types/profile.type'
 
 export const profileService = {
-  async createProfile(
-    uid: string,
-    profileData: ProfileRequestBody,
-    imageFile?: Express.Multer.File
-  ) {
-    let profile_pic = profileData.profile_pic || ''
-
-    if (imageFile) {
-      const storageRef = ref(
-        storage,
-        `profile_images/${uid}/${Date.now()}_${imageFile.originalname}`
-      )
-      const snapshot = await uploadBytes(storageRef, imageFile.buffer)
-      profile_pic = await getDownloadURL(snapshot.ref)
-    }
-
+  async createProfile(uid: string, profileData: ProfileRequestRegisterBody) {
     const profileRef = doc(db, 'profiles', uid)
     const timestamp = new Date().toISOString()
     const data = {
       ...profileData,
-      profile_pic,
       uid,
-      created_at: timestamp,
-      updated_at: timestamp
+      created_at: timestamp
     }
 
     await setDoc(profileRef, data)
@@ -59,10 +42,14 @@ export const profileService = {
     }
 
     const timestamp = new Date().toISOString()
+    const firstName = profileData.firstName || profileSnap.data().firstName
+    const lastName = profileData.lastName || profileSnap.data().lastName
+    const full_name = `${firstName} ${lastName}`
     const data = {
       ...profileSnap.data(),
       ...profileData,
       ...(profile_pic && { profile_pic }),
+      full_name,
       updated_at: timestamp
     }
 
