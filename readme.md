@@ -1,129 +1,114 @@
+<div align="center">
 
-# Mentalys App Backend Architecture
+# MENTALYS API
+### Mental Health Analysis API Solution
 
-## Overview
-Mentalys App is a comprehensive mental health application built on Google Cloud Platform (GCP). This repository contains the backend architecture that powers the application, utilizing various GCP services for robust, scalable, and secure operations.
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
 
-![Arsitektur Backend Aplikasi drawio](https://github.com/user-attachments/assets/a3be2024-6099-4eb9-831e-917cdb76c3fb)
+</div>
 
+## Introduction
 
-## Architecture Components
-
-### Frontend Integration
-- **UI/UX Interface**: Mobile application interface
-- **Local Storage**: Room Database for offline data persistence
-
-### Authentication
-- **Firebase Authentication**: Handles user authentication and authorization
-- Secure user session management
-- OAuth integration
-
-### Backend Services
-
-#### Kubernetes Clusters
-- Deployed on GCP Kubernetes Engine
-- Manages containerized services
-- Ensures high availability and scalability
-- Handles load balancing
-
-#### API Services
-1. **Node.js API (Cloud Run)**
-   - RESTful API endpoints
-   - Business logic implementation
-   - User data management
-   - Service orchestration
-
-2. **ML Service (Flask API)**
-   - Machine Learning model integration
-   - TensorFlow implementation
-   - Real-time predictions
-   - Model serving endpoints
-
-### Data Storage
-1. **ML Data Storage**
-   - Google Cloud Storage
-   - Stores machine learning models
-   - Training data management
-   - Model artifacts
-
-2. **User Data Storage**
-   - Firebase Firestore
-   - NoSQL database
-   - Real-time data synchronization
-   - Scalable data storage
+Mentalys API is a comprehensive solution designed for mental health analysis through multiple approaches. Built with TypeScript and Express.js, this API integrates machine learning models to process questionnaires, audio samples, and handwriting analysis, providing valuable mental health insights.
 
 ## Technology Stack
-- **Backend Framework**: Node.js, Flask
-- **Container Orchestration**: Kubernetes
+
+- **Backend**: Express.js with TypeScript
+- **Authentication**: Firebase Authentication
+- **Database**: Cloud Firestore
 - **Cloud Services**: Google Cloud Platform
-- **Authentication**: Firebase Auth
-- **Database**: Firestore
-- **ML Framework**: TensorFlow
+- **ML Models**: Python-based analysis tools
 
-## Setup Instructions
+## API Endpoints
 
-### Prerequisites
-1. Google Cloud Platform account
-2. Firebase project setup
-3. Node.js and Python installed
-4. Google Cloud CLI
-5. kubectl installed
-
-### Configuration Steps
-1. Clone the repository
-```bash
-git clone https://github.com/Mentalys-App/backend
+```
+Development: http://localhost:3000/api
 ```
 
-2. Install Dependency
-- NPM
+### Documentation
+For complete API documentation, visit Swagger UI:
+```
+Development: http://localhost:3000/api-docs
+```
+or Download this full documentation: [Download Rest API Documentation](https://github.com/user-attachments/files/17968494/documentation.rest.api.pdf)
+
+### Core Features
+
+| Feature | Description |
+|---------|-------------|
+| Mental Health Quiz | Comprehensive questionnaire analysis for mental health assessment |
+| Voice Analysis | Advanced voice pattern analysis for mental state detection |
+| Handwriting Analysis | Sophisticated handwriting analysis for personality insights |
+| History Tracking | Detailed tracking of analysis history |
+| User Management | Secure Firebase-based authentication and profile system |
+
+### Main Endpoints
+
+```bash
+### Authentication
+| Method | Endpoint              | Description               |
+|--------|-----------------------|---------------------------|
+| POST   | `/auth/register`      | User Registration         |
+| POST   | `/auth/login`         | User Login                |
+| POST   | `/auth/reset-password`| Password Reset Request    |
+
+### Profile Management
+| Method | Endpoint              | Description               |
+|--------|-----------------------|---------------------------|
+| POST   | `/user/create`        | Create User Profile       |
+| PUT    | `/user/update`        | Update User Profile       |
+| GET    | `/user/profile`       | Get User Profile          |
+
+### Machine Learning
+| Method | Endpoint              | Description                        |
+|--------|-----------------------|------------------------------------|
+| POST   | `/ml/quiz`            | Submit Quiz Data for Analysis      |
+| POST   | `/ml/audio`           | Upload Audio for Prediction        |
+| POST   | `/ml/handwriting`     | Upload Handwriting for Prediction  |
+
+### Machine Learning History
+| Method | Endpoint              | Description                                |
+|--------|-----------------------|--------------------------------------------|
+| GET    | `/ml/history`         | Retrieve Machine Learning Request History |
+| GET    | `/ml/all-history`     | Retrieve All Machine Learning Requests    |
+
+
+```
+
+## Security
+
+- Firebase Authentication
+- Secure file uploads
+- Data encryption
+
+## Installation Guide
+
+1. Clone repository
+```bash
+git clone https://github.com/Mentalys-App/CLOUD-COMPUTING.git
+```
+
+2. Install dependencies
 ```bash
 npm install
 ```
-- Yarn
+
+3. Configure environment
 ```bash
-yarn install
+cp .env.example .env
+# Configure your Firebase and GCP credentials in .env
 ```
 
-3. Set up GCP credentials
+4. Start development server
 ```bash
-Coming Soon!
+npm run dev
 ```
 
-4. Enable required GCP APIs
-- Cloud Run API
-- Kubernetes Engine API
-- Cloud Storage API
-- Firebase API
+## License
 
-5. Deploy to GCP
-```bash
-Coming Soon!
-```
+Copyright © 2024 Mentalys
 
-## Environment Variables
-Create a `.env` file with the following variables:
-```bash
-Coming Soon!
-```
-
-### Entity Relationship Diagram
-![schema](https://github.com/user-attachments/assets/7ba5b652-17ec-4c8b-9a61-6272d70b3227)
-
-
-## Security Considerations
-- All API endpoints are secured with Firebase Authentication
-- Data encryption in transit and at rest
-- Regular security audits
-- Role-based access control (RBAC)
-
-## Contributing
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-## Contact
-Project Link: [https://github.com/Mentalys-App/backend](https://github.com/Mentalys-App/backend)
+This project is licensed under the MIT License.
