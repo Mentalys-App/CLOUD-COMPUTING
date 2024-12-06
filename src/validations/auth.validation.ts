@@ -15,7 +15,7 @@ export const registrationSchema = Joi.object({
   gender: Joi.string().valid('MALE', 'FEMALE').optional()
 })
 
-export const phoneLoginSchema = Joi.object({
+export const phoneSchema = Joi.object({
   phoneNumber: Joi.string()
     .pattern(/^\+[1-9]\d{1,14}$/)
     .required()
