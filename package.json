@@ -9,7 +9,7 @@
     "email": "bedikadiryt@gmail.com"
   },
   "scripts": {
-    "build": "tsc && copyfiles -u 1 src/docs/swagger.yaml dist/",
+    "build": "tsc && copyfiles -u 1 src/docs/swagger.yaml dist/ && copyfiles -u 1 src/data/PsikiaterDummy.json dist/",
     "start": "node dist/index.js",
     "lint": "eslint src/**/*.ts",
     "format": "npx prettier . --write",
