@@ -3,8 +3,10 @@ import authRouter from './auth.route'
 import { notFound } from '../middleware/error/notFound'
 import { globalErrorHandler } from '../middleware/error/error'
 import { authenticateUser } from '../middleware/auth.middleware'
+import psychiatristRouter from './psychiatrist.route'
 import profileRouter from './profile.route'
 import mlRouter from './ml.route'
+import midtransRouter from './midtrans.route'
 
 const app: Router = Router()
 
@@ -26,6 +28,10 @@ app.use('/api/auth', authRouter)
 app.use('/api/user', profileRouter)
 // API untuk ML
 app.use('/api/ml', mlRouter)
+// API untuk Psikiater
+app.use('/api/psychiatrists', psychiatristRouter)
+// API untuk Midtrans
+app.use('/api/midtrans', midtransRouter)
 app.use('*', notFound)
 app.use(globalErrorHandler)
 export default app
