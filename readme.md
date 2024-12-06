@@ -61,7 +61,7 @@ or Download this full documentation: [Download Rest API Documentation](https://g
 | POST   | `/user`               | Create User Profile       |
 | PUT    | `/user`               | Update User Profile       |
 | GET    | `/user`               | Get User Profile          |
-| POST   | `/signout`            | Log Out User          |
+| POST   | `/signout`            | Log Out User              |
 
 ### Machine Learning
 | Method | Endpoint              | Description                        |
@@ -73,10 +73,19 @@ or Download this full documentation: [Download Rest API Documentation](https://g
 ### Machine Learning History
 | Method | Endpoint              | Description                                |
 |--------|-----------------------|--------------------------------------------|
-| GET    | `/ml/history`         | Retrieve Machine Learning Request History |
-| GET    | `/ml/all-history`     | Retrieve All Machine Learning Requests    |
+| GET    | `/ml/history`         | Retrieve Machine Learning Request History  |
+| GET    | `/ml/all-history`     | Retrieve All Machine Learning Requests     |
 
+### Contact Psikiater
+| Method | Endpoint                | Description                                |
+|--------|-------------------------|--------------------------------------------|
+| GET    | `/api/psychiatrists`    | Retrieve psychiatrists list                |
+| GET    | `/api/psychiatrists/:id`| Retrieve psychiatrists details             |
 
+### Midtrans Implementation
+| Method | Endpoint                | Description                                |
+|--------|-------------------------|--------------------------------------------|
+| POST   | `/api/midtrans/charge`  | Midtrans Payment Request                   |
 ```
 
 ## Security
