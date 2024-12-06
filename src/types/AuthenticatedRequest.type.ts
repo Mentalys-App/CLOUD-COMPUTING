@@ -4,3 +4,10 @@ export interface AuthenticatedRequest extends Request {
     uid: string
   }
 }
+
+export interface AuthenticatedMidtransRequest extends Request {
+  user: {
+    uid: string
+    email: string
+  }
+}
