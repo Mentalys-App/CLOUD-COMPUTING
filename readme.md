@@ -33,7 +33,7 @@ For complete API documentation, visit Swagger UI:
 ```
 Development: http://localhost:3000/api-docs
 ```
-or Download this full documentation: [Download Rest API Documentation](https://github.com/user-attachments/files/17968494/documentation.rest.api.pdf)
+or Download this full documentation: [Download Rest API Documentation](https://github.com/user-attachments/files/18095500/documentation.mentalys.pdf)
 
 ### Core Features
 
@@ -58,7 +58,6 @@ or Download this full documentation: [Download Rest API Documentation](https://g
 ### Profile Management
 | Method | Endpoint              | Description               |
 |--------|-----------------------|---------------------------|
-| POST   | `/user`               | Create User Profile       |
 | PUT    | `/user`               | Update User Profile       |
 | GET    | `/user`               | Get User Profile          |
 | POST   | `/signout`            | Log Out User              |
