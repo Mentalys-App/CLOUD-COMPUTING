@@ -2,14 +2,12 @@ openapi: 3.0.0
 info:
   title: Mentalys REST API
   version: 0.0.1
-  description: REST API for Mentalys Mental Health Application developed by Abdi Setiawan - c179b4ky0013
+  description: REST API for Mentalys Application developed by Abdi Setiawan - c179b4ky0013
   contact:
     name: Abdi Setiawan
     email: c179b4ky0013@bangkit.academy
 
 servers:
-  - url: https://mentalys-restapi-🗿rahasia.com/api
-    description: Production server
   - url: http://localhost:3000/api
     description: Local development server
 
@@ -25,27 +23,45 @@ components:
       type: object
       required:
         - username
+        - profile_pic
+        - firstName
+        - lastName
         - full_name
         - birth_date
         - location
         - gender
+        - phoneNumber
       properties:
         username:
           type: string
-          description: Username unik pengguna
+          description: Unique username for the user
           example: johndoe123
           minLength: 5
           maxLength: 30
 
         profile_pic:
           type: string
-          description: URL gambar profil pengguna
+          description: URL of the user's profile picture
           example: https://storage.googleapis.com/mentalys-bucket/profile_images/user123/profile.jpg
           nullable: true
 
+        firstName:
+          type: string
+          description: First name of the user
+          example: John
+          minLength: 1
+          maxLength: 50
+
+        lastName:
+          type: string
+          description: Last name of the user
+          example: Doe
+          minLength: 1
+          maxLength: 50
+
         full_name:
           type: string
-          description: Nama lengkap pengguna
+          description: Full name of the user
           example: John Doe
           minLength: 3
           maxLength: 50
@@ -53,41 +69,68 @@ components:
         birth_date:
           type: string
           format: date
-          description: Tanggal lahir pengguna
+          description: Birth date of the user
           example: 1990-01-01
 
         location:
           type: string
-          description: Lokasi pengguna
+          description: Location of the user
           example: Jakarta, Indonesia
 
         gender:
           type: string
-          description: Jenis kelamin pengguna
+          description: Gender of the user
           enum:
             - MALE
             - FEMALE
           example: MALE
 
+        phoneNumber:
+          type: string
+          description: Phone number of the user
+          example: +6281234567890
+
         created_at:
           type: string
           format: date-time
-          description: Waktu pembuatan profil
+          description: Time when the profile was created
           example: 2023-06-15T10:30:00Z
 
         updated_at:
           type: string
           format: date-time
-          description: Waktu terakhir profil diperbarui
+          description: Time when the profile was last updated
           example: 2023-06-15T10:30:00Z
 
     UserRegistration:
       type: object
       required:
+        - username
+        - firstName
+        - lastName
+        - phoneNumber
+        - birth_date
         - email
         - password
         - confirmPassword
       properties:
+        username:
+          type: string
+          minLength: 5
+          maxLength: 30
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 50
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 50
+        phoneNumber:
+          type: string
+        birth_date:
+          type: string
+          format: date
         email:
           type: string
           format: email
@@ -122,7 +165,11 @@ components:
       type: object
       required:
         - username
+        - profile_pic
         - full_name
+        - phoneNumber
+        - firstName
+        - lastName
         - birth_date
         - location
         - gender
@@ -136,6 +183,19 @@ components:
           type: string
           format: binary
           description: Profile picture file (image)
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: First name of the user
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Last name of the user
+        phoneNumber:
+          type: string
+          description: Phone number of the user
         full_name:
           type: string
           minLength: 3
@@ -165,11 +225,19 @@ components:
           type: string
           format: binary
           description: Profile picture file (image) (optional)
-        full_name:
+        firstName:
           type: string
-          minLength: 3
+          minLength: 1
           maxLength: 50
-          description: Full name of the user
+          description: First name of the user
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Last name of the user
+        phoneNumber:
+          type: string
+          description: Phone number of the user
         birth_date:
           type: string
           format: date
@@ -415,58 +483,7 @@ paths:
         '404':
           description: Email Not Registered
 
-  /user/create:
-    post:
-      summary: Create User Profile
-      tags:
-        - Profile
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                  minLength: 5
-                  maxLength: 30
-                profile_pic:
-                  type: string
-                  format: binary
-                full_name:
-                  type: string
-                  minLength: 3
-                  maxLength: 50
-                birth_date:
-                  type: string
-                  format: date
-                location:
-                  type: string
-                gender:
-                  type: string
-                  enum: [MALE, FEMALE]
-      responses:
-        '201':
-          description: Profile Created Successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  data:
-                    type: object
-                    additionalProperties: true
-        '400':
-          description: Validation Error
-        '409':
-          description: Username Already Exists
-
-  /user/update:
+  /user:
     put:
       summary: Update User Profile
       tags:
@@ -496,7 +513,6 @@ paths:
         '404':
           description: User Not Found
 
-  /user/profile:
     get:
       summary: Get User Profile
       tags:
@@ -542,30 +558,6 @@ paths:
                   message:
                     type: string
                     example: Profile not found
-  /ml/quiz:
-    post:
-      summary: Submit Quiz Data for Analysis
-      tags:
-        - Machine Learning
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/QuizInputData'
-      responses:
-        '200':
-          description: Quiz Data Processed Successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/QuizResponse'
-        '400':
-          description: Validation Error
-        '500':
-          description: Internal Server Error
 
   /ml/audio:
     post:
@@ -591,6 +583,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AudioResponse'
+        '400':
+          description: Validation Error
+        '500':
+          description: Internal Server Error
+
+  /ml/quiz:
+    post:
+      summary: Submit Quiz Data for Analysis
+      tags:
+        - Machine Learning
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizInputData'
+      responses:
+        '200':
+          description: Quiz Data Processed Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizResponse'
         '400':
           description: Validation Error
         '500':
@@ -625,19 +642,15 @@ paths:
         '500':
           description: Internal Server Error
 
-  /ml/history: # Removed redundant /api prefix since it's already in the server URL
+  /ml/history:
     get:
-      summary: Riwayat Permintaan Machine Learning
+      summary: Retrieve Machine Learning Request History
       description: >
-        Endpoint untuk mengambil riwayat permintaan prediksi Machine Learning 
-        berdasarkan tipe spesifik untuk pengguna yang terautentikasi.
-
+        Endpoint to retrieve the history of machine learning requests made by the authenticated user.
       tags:
         - Machine Learning History
-
       security:
-        - bearerAuth: [] # Changed to match the defined securityScheme name
-
+        - bearerAuth: []
       parameters:
         - in: query
           name: type
@@ -648,17 +661,15 @@ paths:
               - quiz_requests
               - handwriting_requests
               - audio_requests
-          description: Tipe permintaan Machine Learning yang ingin diambil riwayatnya
-
+          description: Type of machine learning request to retrieve history for.
         - in: query
           name: page
           schema:
             type: integer
             minimum: 1
             default: 1
-          description: Nomor halaman untuk paginasi
+          description: Page number for pagination.
           required: false
-
         - in: query
           name: limit
           schema:
@@ -666,25 +677,22 @@ paths:
             minimum: 1
             maximum: 100
             default: 10
-          description: Jumlah item per halaman
+          description: Number of items per page.
           required: false
-
         - in: query
           name: startDate
           schema:
             type: string
             format: date
-          description: Tanggal awal untuk filter riwayat (format ISO 8601)
+          description: Start date for filtering history (ISO 8601 format).
           required: false
-
         - in: query
           name: endDate
           schema:
             type: string
             format: date
-          description: Tanggal akhir untuk filter riwayat (format ISO 8601)
+          description: End date for filtering history (ISO 8601 format).
           required: false
-
         - in: query
           name: sortBy
           schema:
@@ -693,9 +701,8 @@ paths:
               - timestamp
               - prediction
             default: timestamp
-          description: Kolom untuk pengurutan riwayat
+          description: Column to sort the history by.
           required: false
-
         - in: query
           name: sortOrder
           schema:
@@ -704,12 +711,11 @@ paths:
               - asc
               - desc
             default: desc
-          description: Arah pengurutan (ascending atau descending)
+          description: Sort order (ascending or descending).
           required: false
-
       responses:
         '200':
-          description: Riwayat permintaan Machine Learning berhasil diambil
+          description: Machine learning request history retrieved successfully.
           content:
             application/json:
               schema:
@@ -725,91 +731,51 @@ paths:
                       properties:
                         id:
                           type: string
-                          description: ID unik permintaan
+                          description: Unique request ID.
                           example: 'unique_request_id'
                         prediction:
                           type: object
                           properties:
                             result:
                               type: string
-                              description: Hasil prediksi
+                              description: Prediction result.
                               example: 'Anxiety'
                             confidence:
                               type: number
                               format: float
-                              description: Tingkat kepercayaan prediksi
+                              description: Confidence level of the prediction.
                               example: 0.85
                         inputData:
                           type: object
-                          description: Data input yang digunakan untuk prediksi
+                          description: Input data used for the prediction.
                           additionalProperties: true
                         timestamp:
                           type: string
                           format: date-time
-                          description: Waktu permintaan dibuat
+                          description: Time when the request was made.
                           example: '2023-06-15T10:30:00Z'
                         metadata:
                           type: object
-                          description: Metadata tambahan terkait permintaan
+                          description: Additional metadata related to the request.
                           additionalProperties: true
                   page:
                     type: integer
-                    description: Halaman saat ini
+                    description: Current page number.
                     example: 1
                   limit:
                     type: integer
-                    description: Jumlah item per halaman
+                    description: Number of items per page.
                     example: 10
                   total:
                     type: integer
-                    description: Total jumlah item
+                    description: Total number of items.
                     example: 50
                   totalPages:
                     type: integer
-                    description: Total halaman
+                    description: Total number of pages.
                     example: 5
-              examples:
-                QuizRequestHistory:
-                  summary: Contoh riwayat permintaan quiz
-                  value:
-                    status: success
-                    history:
-                      - id: 'unique_request_id_1'
-                        prediction:
-                          result: 'Anxiety'
-                          confidence: 0.85
-                        inputData:
-                          question1: 'Seberapa sering Anda merasa cemas?'
-                          answer1: 'Sering'
-                        timestamp: '2023-06-15T10:30:00Z'
-                        metadata:
-                          source: 'Mobile App'
-                    total: 50
-                    page: 1
-                    limit: 10
-                    totalPages: 5
-
-                HandwritingRequestHistory:
-                  summary: Contoh riwayat permintaan handwriting
-                  value:
-                    status: success
-                    history:
-                      - id: 'unique_request_id_2'
-                        prediction:
-                          result: 'Depresi Ringan'
-                          confidence: 0.72
-                        inputData:
-                          imageUrl: 'https://example.com/handwriting.jpg'
-                        timestamp: '2023-06-16T14:45:00Z'
-                        metadata:
-                          fileSize: '256 KB'
-                    total: 50
-                    page: 1
-                    limit: 10
-                    totalPages: 5
-
         '400':
-          description: Kesalahan validasi parameter
+          description: Parameter validation error.
           content:
             application/json:
               schema:
@@ -821,21 +787,8 @@ paths:
                   message:
                     type: string
                     example: 'Validation error'
-              examples:
-                InvalidType:
-                  summary: Tipe permintaan tidak valid
-                  value:
-                    status: fail
-                    message: 'Invalid ML request type'
-
-                InvalidDateFormat:
-                  summary: Format tanggal tidak valid
-                  value:
-                    status: fail
-                    message: 'Invalid date format. Use ISO 8601'
-
         '401':
-          description: Tidak terautentikasi
+          description: Unauthorized (Invalid or missing token).
           content:
             application/json:
               schema:
@@ -843,7 +796,7 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: error
+                    example: fail
                   message:
                     type: string
                     example: 'Unauthorized - No token provided'
@@ -862,9 +815,8 @@ paths:
             type: integer
             minimum: 1
             default: 1
-          description: Page number for pagination
+          description: Page number for pagination.
           required: false
-
         - in: query
           name: limit
           schema:
@@ -872,25 +824,22 @@ paths:
             minimum: 1
             maximum: 100
             default: 10
-          description: Number of items per page
+          description: Number of items per page.
           required: false
-
         - in: query
           name: startDate
           schema:
             type: string
             format: date
-          description: Start date for filtering history (ISO 8601 format)
+          description: Start date for filtering history (ISO 8601 format).
           required: false
-
         - in: query
           name: endDate
           schema:
             type: string
             format: date
-          description: End date for filtering history (ISO 8601 format)
+          description: End date for filtering history (ISO 8601 format).
           required: false
-
         - in: query
           name: sortBy
           schema:
@@ -898,9 +847,8 @@ paths:
             enum:
               - timestamp
             default: timestamp
-          description: Column to sort the history by
+          description: Column to sort the history by.
           required: false
-
         - in: query
           name: sortOrder
           schema:
@@ -909,12 +857,11 @@ paths:
               - asc
               - desc
             default: desc
-          description: Sort order (ascending or descending)
+          description: Sort order (ascending or descending).
           required: false
-
       responses:
         '200':
-          description: All ML request history retrieved successfully
+          description: All ML request history retrieved successfully.
           content:
             application/json:
               schema:
@@ -930,77 +877,55 @@ paths:
                       properties:
                         id:
                           type: string
-                          description: Unique request ID
+                          description: Unique request ID.
                           example: 'unique_request_id'
                         type:
                           type: string
-                          description: Type of ML request
+                          description: Type of ML request.
                           example: 'quiz_requests'
                         prediction:
                           type: object
                           properties:
                             result:
                               type: string
-                              description: Prediction result
+                              description: Prediction result.
                               example: 'Anxiety'
                             confidence:
                               type: number
                               format: float
-                              description: Confidence level of the prediction
+                              description: Confidence level of the prediction.
                               example: 0.85
                         inputData:
                           type: object
-                          description: Input data used for the prediction
+                          description: Input data used for the prediction.
                           additionalProperties: true
                         timestamp:
                           type: string
                           format: date-time
-                          description: Time when the request was made
+                          description: Time when the request was made.
                           example: '2023-06-15T10:30:00Z'
                         metadata:
                           type: object
-                          description: Additional metadata related to the request
+                          description: Additional metadata related to the request.
                           additionalProperties: true
                   page:
                     type: integer
-                    description: Current page number
+                    description: Current page number.
                     example: 1
                   limit:
                     type: integer
-                    description: Number of items per page
+                    description: Number of items per page.
                     example: 10
                   total:
                     type: integer
-                    description: Total number of items
+                    description: Total number of items.
                     example: 50
                   totalPages:
                     type: integer
-                    description: Total number of pages
+                    description: Total number of pages.
                     example: 5
-              examples:
-                AllRequestHistory:
-                  summary: Example of all ML request history
-                  value:
-                    status: success
-                    history:
-                      - id: 'unique_request_id_1'
-                        type: 'quiz_requests'
-                        prediction:
-                          result: 'Anxiety'
-                          confidence: 0.85
-                        inputData:
-                          age: '30'
-                          feeling_nervous: true
-                        timestamp: '2023-06-15T10:30:00Z'
-                        metadata:
-                          source: 'Mobile App'
-                    total: 50
-                    page: 1
-                    limit: 10
-                    totalPages: 5
-
         '400':
-          description: Parameter validation error
+          description: Parameter validation error.
           content:
             application/json:
               schema:
@@ -1012,15 +937,8 @@ paths:
                   message:
                     type: string
                     example: 'Validation error'
-              examples:
-                InvalidDateFormat:
-                  summary: Invalid date format
-                  value:
-                    status: fail
-                    message: 'Invalid date format. Use ISO 8601'
-
         '401':
-          description: Unauthorized (Invalid or missing token)
+          description: Unauthorized (Invalid or missing token).
           content:
             application/json:
               schema:
