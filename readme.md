@@ -33,7 +33,8 @@ For complete API documentation, visit Swagger UI:
 ```
 Development: http://localhost:3000/api-docs
 ```
-or Download this full documentation: [Download Rest API Documentation](https://github.com/user-attachments/files/18095500/documentation.mentalys.pdf)
+
+or Download this full documentation: [Download Rest API Documentation](https://github.com/user-attachments/files/18095767/mentalys.doc.pdf)
 
 ### Core Features
 
