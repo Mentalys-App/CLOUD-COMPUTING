@@ -950,3 +950,174 @@ paths:
                   message:
                     type: string
                     example: 'Unauthorized - No token provided'
+
+  /psychiatrists:
+    get:
+      tags:
+        - Psychiatrists
+      summary: Mendapatkan daftar psikiater
+      description: Mengambil semua psikiater yang tersedia.
+      responses:
+        '200':
+          description: Daftar psikiater berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "5GvRbLGEeAsMNhLwOHv3"
+                        fullName:
+                          type: string
+                          example: "Dr. Tifa Lockhart"
+                        title:
+                          type: string
+                          example: "MD, Psychiatry"
+                        mainRole:
+                          type: string
+                          example: "Psychiatric Consultant"
+                        consultationFee:
+                          type: number
+                          example: 150000
+        '500':
+          description: Terjadi kesalahan saat membaca data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error reading data"
+
+  /psychiatrists/{id}:
+    get:
+      tags:
+        - Psychiatrists Details
+      summary: Mendapatkan detail psikiater
+      description: Mengambil informasi detail psikiater berdasarkan ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID psikiater yang ingin diambil
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detail psikiater berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "5GvRbLGEeAsMNhLwOHv3"
+                      fullName:
+                        type: string
+                        example: "Dr. Tifa Lockhart"
+                      title:
+                        type: string
+                        example: "MD, Psychiatry"
+                      aboutMe:
+                        type: string
+                        example: "Dr. Tifa is a compassionate psychiatrist with over a decade of experience in mental health care."
+                      consultationFee:
+                        type: number
+                        example: 150000
+        '404':
+          description: Psikiater tidak ditemukan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Psychiatrist not found"
+        '500':
+          description: Terjadi kesalahan saat membaca data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error reading data"
+
+  /midtrans/charge:
+    post:
+      tags:
+        - Midtrans
+      summary: Membuat transaksi Midtrans
+      description: Mengirim permintaan untuk membuat transaksi menggunakan Midtrans.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                psychiatristId:
+                  type: string
+                  example: "5GvRbLGEeAsMNhLwOHv3"
+                phoneNumber:
+                  type: string
+                  example: "+62123456789"
+      responses:
+        '200':
+          description: Transaksi berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      transactionId:
+                        type: string
+                        example: "order-1234567890-uid"
+                      paymentUrl:
+                        type: string
+                        example: "https://payment.midtrans.com/..."
+        '400':
+          description: Permintaan tidak valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Missing required fields"
+        '500':
+          description: Terjadi kesalahan saat memproses transaksi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error processing transaction"
